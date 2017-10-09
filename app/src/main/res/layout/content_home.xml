@@ -8,9 +8,23 @@
     tools:context="com.greata.greatasmartcam.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#ffFFBB88"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:text="TextView"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
