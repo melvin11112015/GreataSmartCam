@@ -28,6 +28,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//git test
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private List<String> mDatas;
