@@ -3,7 +3,9 @@ package com.greata.greatasmartcam;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,6 +60,7 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 'A'; i < 'z'; i++) {
             mDatas.add("" + (char) i);
         }
+        mDatas.add("plus");
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // 设置布局管理器
@@ -84,6 +88,11 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             holder.tv.setText(mDatas.get(position));
+            if (mDatas.get(position).equals("plus")) {
+                holder.iv.setImageResource(R.drawable.gear_128px);
+                holder.playiv.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         @Override
@@ -94,10 +103,13 @@ public class HomeActivity extends AppCompatActivity
         class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView tv;
+            ImageView iv, playiv;
 
             public MyViewHolder(View view) {
                 super(view);
                 tv = view.findViewById(R.id.id_num);
+                iv = view.findViewById(R.id.video_img);
+                playiv = view.findViewById(R.id.play_img);
             }
         }
     }
