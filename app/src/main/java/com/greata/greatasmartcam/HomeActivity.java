@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,8 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mDatas = new ArrayList<String>();
-        for (int i = 'A'; i < 'z'; i++) {
-            mDatas.add("" + (char) i);
-        }
+        mDatas.add("Home");
+        mDatas.add("Test");
         mDatas.add("plus");
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -79,9 +79,12 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
+            View view = LayoutInflater.from(
                     HomeActivity.this).inflate(R.layout.item_home, parent,
-                    false));
+                    false);
+            MyViewHolder holder = new MyViewHolder(view);
+            // TODO: 2017/10/13 setOnClickListener or Checkable
+
             return holder;
         }
 
@@ -156,6 +159,11 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void videoimgOnClick(View view) {
+        Toast.makeText(HomeActivity.this, "toast video", Toast.LENGTH_SHORT).show();
+        // TODO: 2017/10/13 use listener and hide buttons bar
     }
 
     class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
