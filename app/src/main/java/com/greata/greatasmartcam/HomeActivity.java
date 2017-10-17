@@ -1,12 +1,14 @@
 package com.greata.greatasmartcam;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -195,6 +197,11 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
+            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            mIntent.setAction(PlayerActivity.ACTION_VIEW);
+            startActivity(mIntent);
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
