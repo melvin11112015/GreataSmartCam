@@ -31,6 +31,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/root"
 
@@ -46,7 +47,8 @@
 
         android:layout_width="match_parent"
 
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:controller_layout_id="@layout/exo_playback_control_view"/>
 
 
     <LinearLayout
@@ -57,7 +59,8 @@
 
         android:background="#88000000"
 
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <TextView
@@ -73,6 +76,7 @@
 
             android:textSize="10sp"
 
+            android:visibility="gone"
             tools:ignore="SmallSp" />
 
 

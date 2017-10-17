@@ -136,7 +136,7 @@ import java.util.UUID;
 public class PlayerActivity extends Activity implements OnClickListener, EventListener,
 
         PlaybackControlView.VisibilityListener {
-
+// TODO: 2017/10/17 make a fullscreen functionality 
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
 
@@ -261,6 +261,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
 
         simpleExoPlayerView = findViewById(R.id.player_view);
+        simpleExoPlayerView.hideController();
 
         simpleExoPlayerView.setControllerVisibilityListener(this);
 
