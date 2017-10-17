@@ -14,19 +14,25 @@
         android:layout_height="30dp"
         android:background="@drawable/side_nav_bar"
         android:gravity="center_vertical"
-        android:paddingStart="10dp"
         android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:text="TextView"
         android:textColor="@android:color/background_light"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/textView">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         style="@style/Widget.AppCompat.ButtonBar"

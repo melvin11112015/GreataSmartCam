@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,9 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private List<String> mDatas;
+    HomeAdapter mAdapter;
+
+    SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +70,61 @@ public class HomeActivity extends AppCompatActivity
         // 设置布局管理器
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // 设置adapter
-        HomeAdapter mAdapter;
+
         mRecyclerView.setAdapter(mAdapter = new HomeAdapter());
         // 设置Item添加和移除的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // 设置Item之间间隔样式
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe_refresh);
+
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            public void onRefresh() {
+                // TODO: 2017/10/17 do real refresh actions
+                //我在List最前面加入一条数据
+                mDatas.add("嘿，我是“下拉刷新”生出来的");
+                //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
+                mAdapter.notifyDataSetChanged();
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
+    }
+
+    MenuItem mProgressMenu;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        mProgressMenu = menu.findItem(R.id.refresh);
+        return true;
+    }
+
+    public void setLoadingState(boolean refreshing) {
+        if (mProgressMenu != null) {
+            if (refreshing) {
+                mProgressMenu
+                        .setActionView(R.layout.actionbar_indeterminate_progress);
+                mProgressMenu.setVisible(true);
+            } else {
+                mProgressMenu.setVisible(false);
+                mProgressMenu.setActionView(null);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                // TODO: 2017/10/17 do real refresh actions
+                setLoadingState(true);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
