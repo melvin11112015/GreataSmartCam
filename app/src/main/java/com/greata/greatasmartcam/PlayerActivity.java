@@ -273,7 +273,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         setContentView(R.layout.player_activity);
 
-        lockScreenButton = (ImageButton) findViewById(R.id.lockscreen_btn);
+        lockScreenButton = findViewById(R.id.lockscreen_btn);
         if (!isLandscape()) {
             lockScreenButton.setVisibility(View.GONE);
         }

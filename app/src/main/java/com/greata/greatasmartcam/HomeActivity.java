@@ -51,7 +51,8 @@ public class HomeActivity extends AppCompatActivity
 
     private static final String TAG = "ASYNC_TASK";
 
-MyTask mTask;
+    MyTask mTask;
+
     private class MyTask extends AsyncTask<String, Integer, String> {
         //onPreExecute方法用于在执行后台任务前做一些UI操作
         @Override
@@ -294,7 +295,8 @@ MyTask mTask;
             showPlay();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

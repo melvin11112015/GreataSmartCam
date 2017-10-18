@@ -27,7 +27,8 @@
         <activity
             android:name=".PlayerActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".SampleChooserActivity"></activity>
+        <activity android:name=".SampleChooserActivity" />
+        <activity android:name=".AddDeviceActivity"></activity>
     </application>
 
 </manifest>
