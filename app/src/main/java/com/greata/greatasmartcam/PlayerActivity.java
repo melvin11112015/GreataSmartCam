@@ -6,6 +6,7 @@ import android.content.Context;
 
 import android.content.Intent;
 
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
 import android.content.res.Configuration;
@@ -33,6 +34,7 @@ import android.widget.Button;
 
 import android.widget.FrameLayout;
 
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import android.widget.TextView;
@@ -189,7 +191,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private TextView debugTextView;
 
     private Button retryButton;
-
+    private ImageButton lockScreenButton;
 
     private DataSource.Factory mediaDataSourceFactory;
 
@@ -223,6 +225,31 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private ViewGroup adOverlayViewGroup;
     // Activity lifecycle
 
+    public void playerOnClick(View view) {
+        switch (view.getId()) {
+            case R.id.lockscreen_btn:
+                Log.d("Test", "" + getRequestedOrientation());
+                if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LOCKED) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                }
+                break;
+        }
+    }
+
+    public boolean isLandscape() {
+        /*   * 通过API动态改变当前屏幕的显示方向   */
+
+        // 取得当前屏幕方向
+        WindowManager wm = this.getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
+
+        return width > height;
+    }
+
+
     @Override
 
     public void onCreate(Bundle savedInstanceState) {
@@ -245,6 +272,11 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
 
         setContentView(R.layout.player_activity);
+
+        lockScreenButton = (ImageButton) findViewById(R.id.lockscreen_btn);
+        if (!isLandscape()) {
+            lockScreenButton.setVisibility(View.GONE);
+        }
 
         View rootView = findViewById(R.id.root);
 
@@ -357,6 +389,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(this, "横屏模式", Toast.LENGTH_SHORT).show();
@@ -365,6 +398,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             getWindow().setAttributes(attrs);
             getWindow().addFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            lockScreenButton.setVisibility(View.VISIBLE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Toast.makeText(this, "竖屏模式", Toast.LENGTH_SHORT).show();
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
@@ -372,6 +406,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             getWindow().setAttributes(attrs);
             getWindow().clearFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            lockScreenButton.setVisibility(View.GONE);
         }
         Log.d("Test", "rotate");
     }

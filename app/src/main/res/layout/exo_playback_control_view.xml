@@ -73,6 +73,14 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:text="Btn" />
+
+        <ImageButton
+            android:id="@+id/lockscreen_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:onClick="playerOnClick"
+            app:srcCompat="@android:drawable/ic_lock_lock" />
     </LinearLayout>
 
 </RelativeLayout>
