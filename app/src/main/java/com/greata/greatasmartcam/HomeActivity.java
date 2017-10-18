@@ -1,6 +1,7 @@
 package com.greata.greatasmartcam;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -14,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +47,7 @@ public class HomeActivity extends AppCompatActivity
     HomeAdapter mAdapter;
 
     SwipeRefreshLayout mRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,51 @@ public class HomeActivity extends AppCompatActivity
         });
 
 
+    }
+
+    private void showPlay() {
+
+        if (!NetWorkUtils.isWifiConnected(this)) {
+            showNormalDialog();
+        } else {
+            Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
+            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            mIntent.setAction(PlayerActivity.ACTION_VIEW);
+            startActivity(mIntent);
+        }
+    }
+
+    private void showNormalDialog() {
+        /* @setIcon 设置对话框图标
+         * @setTitle 设置对话框标题
+         * @setMessage 设置对话框消息提示
+         * setXXX方法返回Dialog对象，因此可以链式设置属性
+         */
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(HomeActivity.this);
+        normalDialog.setMessage("你的网络不是wifi，是否继续");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                        Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
+                        mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+                        mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+                        mIntent.setAction(PlayerActivity.ACTION_VIEW);
+                        startActivity(mIntent);
+                    }
+                });
+        normalDialog.setNegativeButton("关闭", null);
+        // 显示
+        normalDialog.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "network:" + NetWorkUtils.isNetworkConnected(this) + NetWorkUtils.getConnectedType(this), Toast.LENGTH_SHORT).show();
     }
 
     MenuItem mProgressMenu;
@@ -197,11 +245,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
-            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
-            mIntent.setAction(PlayerActivity.ACTION_VIEW);
-            startActivity(mIntent);
+            showPlay();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
