@@ -28,7 +28,6 @@ import android.view.View.OnClickListener;
 
 import android.view.ViewGroup;
 
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -140,7 +139,6 @@ import java.util.UUID;
 public class PlayerActivity extends Activity implements OnClickListener, EventListener,
 
         PlaybackControlView.VisibilityListener {
-// TODO: 2017/10/17 make a fullscreen functionality 
 
     public static final String DRM_SCHEME_UUID_EXTRA = "drm_scheme_uuid";
 
@@ -223,10 +221,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private Uri loadedAdTagUri;
 
     private ViewGroup adOverlayViewGroup;
-
-
     // Activity lifecycle
-
 
     @Override
 

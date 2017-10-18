@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,57 @@ public class HomeActivity extends AppCompatActivity
 
     SwipeRefreshLayout mRefreshLayout;
 
+    private static final String TAG = "ASYNC_TASK";
+
+MyTask mTask;
+    private class MyTask extends AsyncTask<String, Integer, String> {
+        //onPreExecute方法用于在执行后台任务前做一些UI操作
+        @Override
+        protected void onPreExecute() {
+            Log.i(TAG, "onPreExecute() called");
+            setLoadingState(true);
+        }
+
+        //doInBackground方法内部执行后台任务,不可在此方法内修改UI
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i(TAG, "doInBackground(Params... params) called");
+            try {
+                Thread.sleep(1000);
+                mDatas.add("嘿，我是“下拉刷新”生出来的");
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        //onProgressUpdate方法用于更新进度信息
+        @Override
+        protected void onProgressUpdate(Integer... progresses) {
+            Log.i(TAG, "onProgressUpdate(Progress... progresses) called");
+        }
+
+        //onPostExecute方法用于在执行完后台任务后更新UI,显示结果
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "onPostExecute(Result result) called");
+            setLoadingState(false);
+            //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
+            mAdapter.notifyDataSetChanged();
+            mRefreshLayout.setRefreshing(false);
+        }
+
+        //onCancelled方法用于在取消执行中的任务时更改UI
+        @Override
+        protected void onCancelled() {
+            Log.i(TAG, "onCancelled() called");
+            setLoadingState(false);
+            //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
+            mAdapter.notifyDataSetChanged();
+            mRefreshLayout.setRefreshing(false);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +138,8 @@ public class HomeActivity extends AppCompatActivity
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
-                // TODO: 2017/10/17 do real refresh actions
-                //我在List最前面加入一条数据
-                mDatas.add("嘿，我是“下拉刷新”生出来的");
-                //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
-                mAdapter.notifyDataSetChanged();
-                mRefreshLayout.setRefreshing(false);
+                mTask = new MyTask();
+                mTask.execute();
             }
         });
 
@@ -158,10 +206,9 @@ public class HomeActivity extends AppCompatActivity
             if (refreshing) {
                 mProgressMenu
                         .setActionView(R.layout.actionbar_indeterminate_progress);
-                mProgressMenu.setVisible(true);
             } else {
-                mProgressMenu.setVisible(false);
                 mProgressMenu.setActionView(null);
+                mProgressMenu.setIcon(android.R.drawable.ic_popup_sync);
             }
         }
     }
@@ -170,8 +217,8 @@ public class HomeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                // TODO: 2017/10/17 do real refresh actions
-                setLoadingState(true);
+                mTask = new MyTask();
+                mTask.execute();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -185,7 +232,6 @@ public class HomeActivity extends AppCompatActivity
                     HomeActivity.this).inflate(R.layout.item_home, parent,
                     false);
             MyViewHolder holder = new MyViewHolder(view);
-            // TODO: 2017/10/13 setOnClickListener or Checkable
 
             return holder;
         }

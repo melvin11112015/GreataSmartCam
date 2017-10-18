@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="refresh"
         android:id="@+id/refresh"
         android:icon="@android:drawable/ic_popup_sync"
+        android:iconTint="@android:color/background_light"
+        android:title="refresh"
         app:showAsAction="always"></item>
 
 </menu>
