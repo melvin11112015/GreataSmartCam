@@ -8,6 +8,7 @@ import android.content.Intent;
 
 import android.content.pm.PackageManager;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.support.annotation.NonNull;
 
 import android.text.TextUtils;
 
+import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.View;
@@ -26,6 +28,8 @@ import android.view.View.OnClickListener;
 
 import android.view.ViewGroup;
 
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import android.widget.FrameLayout;
@@ -355,6 +359,27 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "横屏模式", Toast.LENGTH_SHORT).show();
+            WindowManager.LayoutParams attrs = getWindow().getAttributes();
+            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            getWindow().setAttributes(attrs);
+            getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this, "竖屏模式", Toast.LENGTH_SHORT).show();
+            WindowManager.LayoutParams attrs = getWindow().getAttributes();
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setAttributes(attrs);
+            getWindow().clearFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        Log.d("Test", "rotate");
+    }
 
     @Override
 
