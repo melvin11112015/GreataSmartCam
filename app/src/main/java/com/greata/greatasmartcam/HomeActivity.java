@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
     SharedPreferences sPre;
 
     TextView noItemText;
+    ImageView playImg;
 
     private static final String TAG = "ASYNC_TASK";
 
@@ -59,6 +60,8 @@ public class HomeActivity extends AppCompatActivity
         protected void onPreExecute() {
             Log.i(TAG, "onPreExecute() called");
             setLoadingState(true);
+            // TODO: 2017/10/19 change playImg while refreshing 
+            //playImg.setImageDrawable();
         }
 
         //doInBackground方法内部执行后台任务,不可在此方法内修改UI
@@ -109,6 +112,7 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         noItemText = (TextView) findViewById(R.id.noItemText);
+        playImg = (ImageView) findViewById(R.id.play_img);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
