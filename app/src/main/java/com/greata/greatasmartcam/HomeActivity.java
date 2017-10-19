@@ -3,17 +3,14 @@ package com.greata.greatasmartcam;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +45,9 @@ public class HomeActivity extends AppCompatActivity
     HomeAdapter mAdapter;
 
     SwipeRefreshLayout mRefreshLayout;
+    SharedPreferences sPre;
+
+    TextView noItemText;
 
     private static final String TAG = "ASYNC_TASK";
 
@@ -67,8 +67,7 @@ public class HomeActivity extends AppCompatActivity
             Log.i(TAG, "doInBackground(Params... params) called");
             try {
                 Thread.sleep(1000);
-                mDatas.add("嘿，我是“下拉刷新”生出来的");
-
+                sPre = getSharedPreferences("devices", Context.MODE_PRIVATE);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -87,7 +86,7 @@ public class HomeActivity extends AppCompatActivity
             Log.i(TAG, "onPostExecute(Result result) called");
             setLoadingState(false);
             //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
-            mAdapter.notifyDataSetChanged();
+            itemsCheck();
             mRefreshLayout.setRefreshing(false);
         }
 
@@ -97,7 +96,7 @@ public class HomeActivity extends AppCompatActivity
             Log.i(TAG, "onCancelled() called");
             setLoadingState(false);
             //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
-            mAdapter.notifyDataSetChanged();
+            itemsCheck();
             mRefreshLayout.setRefreshing(false);
         }
     }
@@ -109,21 +108,18 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        noItemText = (TextView) findViewById(R.id.noItemText);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mDatas = new ArrayList<String>();
-        mDatas.add("Home");
-        mDatas.add("Test");
-        mDatas.add("plus");
-
+        newMTask();
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // 设置布局管理器
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -136,15 +132,28 @@ public class HomeActivity extends AppCompatActivity
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe_refresh);
-
+        mRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
-                mTask = new MyTask();
-                mTask.execute();
+                newMTask();
             }
         });
 
 
+    }
+
+    private void newMTask() {
+        mTask = new MyTask();
+        mTask.execute();
+    }
+
+    private void itemsCheck() {
+        mAdapter.notifyDataSetChanged();
+        if (mDatas.isEmpty()) {
+            noItemText.setVisibility(View.VISIBLE);
+        } else {
+            noItemText.setVisibility(View.GONE);
+        }
     }
 
     private void showPlay() {
@@ -218,8 +227,7 @@ public class HomeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                mTask = new MyTask();
-                mTask.execute();
+                newMTask();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -240,11 +248,6 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             holder.tv.setText(mDatas.get(position));
-            if (mDatas.get(position).equals("plus")) {
-                holder.iv.setImageResource(R.drawable.gear_128px);
-                holder.playiv.setVisibility(View.INVISIBLE);
-            }
-
         }
 
         @Override
@@ -264,6 +267,7 @@ public class HomeActivity extends AppCompatActivity
                 playiv = view.findViewById(R.id.play_img);
             }
         }
+
     }
 
 
@@ -298,9 +302,11 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-
+            mDatas.add("itemx");
+            itemsCheck();
         } else if (id == R.id.nav_manage) {
-
+            mDatas.clear();
+            itemsCheck();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
