@@ -28,7 +28,11 @@
             android:name=".PlayerActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".SampleChooserActivity" />
-        <activity android:name=".AddDeviceActivity"></activity>
+        <activity android:name=".AddDeviceActivity" />
+
+        <service
+            android:name=".MoveInspectionService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

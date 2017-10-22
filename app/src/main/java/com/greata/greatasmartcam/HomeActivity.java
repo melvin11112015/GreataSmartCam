@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,22 +23,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import java.util.List;
+import java.util.Map;
 
 
 //git test
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private List<String> mDatas;
-    HomeAdapter mAdapter;
-
+    private List<Map<String, Object>> mDatas;
+    private Map<String, Object> mMap;
+    SimpleAdapter mAdapter;
+    ListView playList;
+    LinearLayout myToolB;
     SwipeRefreshLayout mRefreshLayout;
     SharedPreferences sPre;
 
@@ -122,18 +129,28 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mDatas = new ArrayList<String>();
-        newMTask();
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        // 设置布局管理器
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // 设置adapter
+        playList = (ListView) findViewById(R.id.play_list);
 
-        mRecyclerView.setAdapter(mAdapter = new HomeAdapter());
-        // 设置Item添加和移除的动画
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        // 设置Item之间间隔样式
-        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mDatas = new ArrayList<Map<String, Object>>();
+        mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
+
+        playList.setAdapter(mAdapter);
+
+        myToolB = (LinearLayout) findViewById(R.id.home_toolbar);
+        myToolB.setVisibility(View.INVISIBLE);
+
+        playList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(HomeActivity.this,"click "+i,Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this,"selected?"+playList.getSelectedItemPosition(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this,"checked?"+playList.getCheckedItemPosition(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        newMTask();
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe_refresh);
         mRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -237,43 +254,6 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(
-                    HomeActivity.this).inflate(R.layout.item_home, parent,
-                    false);
-            MyViewHolder holder = new MyViewHolder(view);
-
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.tv.setText(mDatas.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDatas.size();
-        }
-
-        class MyViewHolder extends RecyclerView.ViewHolder {
-
-            TextView tv;
-            ImageView iv, playiv;
-
-            public MyViewHolder(View view) {
-                super(view);
-                tv = view.findViewById(R.id.id_num);
-                iv = view.findViewById(R.id.video_img);
-                playiv = view.findViewById(R.id.play_img);
-            }
-        }
-
-    }
-
 
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
@@ -296,6 +276,7 @@ public class HomeActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Intent intent;
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -303,10 +284,13 @@ public class HomeActivity extends AppCompatActivity
             showPlay();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
+            intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            mDatas.add("itemx");
+            mMap = new HashMap<String, Object>();
+            mMap.put("screenshot", android.R.color.black);
+            mMap.put("name", "mathi");
+            mDatas.add(mMap);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             mDatas.clear();
@@ -314,7 +298,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            intent = new Intent(HomeActivity.this, MoveInspectionService.class);
+            startService(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -325,96 +310,6 @@ public class HomeActivity extends AppCompatActivity
     public void videoimgOnClick(View view) {
         Toast.makeText(HomeActivity.this, "toast video", Toast.LENGTH_SHORT).show();
         // TODO: 2017/10/13 use listener and hide buttons bar
-    }
-
-    class MyDividerItemDecoration extends RecyclerView.ItemDecoration {
-
-        private final int[] ATTRS = new int[]{
-                android.R.attr.listDivider
-        };
-        public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-        public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
-        /**
-         * 用于绘制间隔样式
-         */
-        private Drawable mDivider;
-        /**
-         * 列表的方向，水平/竖直
-         */
-        private int mOrientation;
-
-
-        public MyDividerItemDecoration(Context context, int orientation) {
-            // 获取默认主题的属性
-            final TypedArray a = context.obtainStyledAttributes(ATTRS);
-            mDivider = a.getDrawable(0);
-            a.recycle();
-            setOrientation(orientation);
-        }
-
-        @Override
-        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            // 绘制间隔
-            if (mOrientation == VERTICAL_LIST) {
-                drawVertical(c, parent);
-            } else {
-                drawHorizontal(c, parent);
-            }
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            if (mOrientation == VERTICAL_LIST) {
-                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
-            } else {
-                outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
-            }
-        }
-
-        private void setOrientation(int orientation) {
-            if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
-                throw new IllegalArgumentException("invalid orientation");
-            }
-            mOrientation = orientation;
-        }
-
-        /**
-         * 绘制间隔
-         */
-        private void drawVertical(Canvas c, RecyclerView parent) {
-            final int left = parent.getPaddingLeft();
-            final int right = parent.getWidth() - parent.getPaddingRight();
-            final int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                final View child = parent.getChildAt(i);
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                        .getLayoutParams();
-                final int top = child.getBottom() + params.bottomMargin +
-                        Math.round(ViewCompat.getTranslationY(child));
-                final int bottom = top + mDivider.getIntrinsicHeight();
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
-            }
-        }
-
-        /**
-         * 绘制间隔
-         */
-        private void drawHorizontal(Canvas c, RecyclerView parent) {
-            final int top = parent.getPaddingTop();
-            final int bottom = parent.getHeight() - parent.getPaddingBottom();
-            final int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                final View child = parent.getChildAt(i);
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                        .getLayoutParams();
-                final int left = child.getRight() + params.rightMargin +
-                        Math.round(ViewCompat.getTranslationX(child));
-                final int right = left + mDivider.getIntrinsicHeight();
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
-            }
-        }
     }
 
 }
