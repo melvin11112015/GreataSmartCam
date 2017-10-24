@@ -30,6 +30,9 @@
             android:configChanges="orientation|screenSize" />
         <activity android:name=".SampleChooserActivity" />
         <activity android:name=".AddDeviceActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
 
         <service
             android:name=".MoveInspectionService"
