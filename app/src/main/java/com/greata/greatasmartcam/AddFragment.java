@@ -12,10 +12,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class AddFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LAYOUT_ID = "param1";
-    // TODO: Rename and change types of parameters
+
     private int layoutId;
 
     public AddFragment() {
@@ -28,7 +28,7 @@ public class AddFragment extends Fragment {
      *
      * @return A new instance of fragment AddFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static AddFragment newInstance(int layoutId) {
         AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
