@@ -29,12 +29,13 @@ public class MoveInspectionService extends Service {
         NotificationManager barmanager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notice;
         Notification.Builder builder = new Notification.Builder(this).setTicker("移动了")
-                .setSmallIcon(R.drawable.logo).setWhen(System.currentTimeMillis());
+                .setSmallIcon(R.drawable.logo).setWhen(System.currentTimeMillis()).setDefaults(Notification.DEFAULT_ALL);
         Intent appIntent=null;
         appIntent = new Intent(this,PlayerActivity.class);
         appIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
         appIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
         appIntent.setAction(PlayerActivity.ACTION_VIEW);
+        //使用默认的声音、振动、闪光
         //appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);//关键的一步，设置启动模式
         PendingIntent contentIntent =PendingIntent.getActivity(this, 0,appIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
