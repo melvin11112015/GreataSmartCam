@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity
         protected void onPreExecute() {
             Log.i(TAG, "onPreExecute() called");
             setLoadingState(true);
-            // TODO: 2017/10/19 change playImg while refreshing 
+            // TODO: 2017/10/19 change playImg while refreshing
             //playImg.setImageDrawable();
         }
 
@@ -312,7 +312,8 @@ public class HomeActivity extends AppCompatActivity
             mDatas.clear();
             itemsCheck();
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
 
         }
