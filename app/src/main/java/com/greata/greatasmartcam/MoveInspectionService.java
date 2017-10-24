@@ -25,7 +25,7 @@ public class MoveInspectionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        // TODO: 2017/10/23 让通知消息打开ACTIVITY 
+
         NotificationManager barmanager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notice;
         Notification.Builder builder = new Notification.Builder(this).setTicker("移动了")
@@ -39,7 +39,7 @@ public class MoveInspectionService extends Service {
         PendingIntent contentIntent =PendingIntent.getActivity(this, 0,appIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             notice = builder.setContentIntent(contentIntent).setContentTitle("标题").setContentText("内容").build();
-            notice.flags=Notification.FLAG_AUTO_CANCEL;
+            //notice.flags=Notification.FLAG_AUTO_CANCEL;
             barmanager.notify(10,notice);
         }
         Log.d("Test", "onCreate service ");
