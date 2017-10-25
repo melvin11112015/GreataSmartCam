@@ -179,42 +179,17 @@ public class HomeActivity extends AppCompatActivity
 
     private void showPlay() {
 
-        if (!NetWorkUtils.isWifiConnected(this)) {
-            showNormalDialog();
-        } else {
+
+
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
             mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);
-        }
+
     }
 
-    private void showNormalDialog() {
-        /* @setIcon 设置对话框图标
-         * @setTitle 设置对话框标题
-         * @setMessage 设置对话框消息提示
-         * setXXX方法返回Dialog对象，因此可以链式设置属性
-         */
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(HomeActivity.this);
-        normalDialog.setMessage("你的网络不是wifi，是否继续");
-        normalDialog.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                        Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
-                        mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-                        mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
-                        mIntent.setAction(PlayerActivity.ACTION_VIEW);
-                        startActivity(mIntent);
-                    }
-                });
-        normalDialog.setNegativeButton("关闭", null);
-        // 显示
-        normalDialog.show();
-    }
+
 
     @Override
     protected void onStart() {

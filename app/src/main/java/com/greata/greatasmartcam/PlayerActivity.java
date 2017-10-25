@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.pm.ActivityInfo;
@@ -18,6 +19,7 @@ import android.os.Handler;
 
 import android.support.annotation.NonNull;
 
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import android.util.Log;
@@ -256,7 +258,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         super.onCreate(savedInstanceState);
 
-        shouldAutoPlay = true;
+        shouldAutoPlay = false;
 
         clearResumePosition();
 
@@ -297,7 +299,36 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         simpleExoPlayerView.setControllerVisibilityListener(this);
 
         simpleExoPlayerView.requestFocus();
+        showNormalDialog();
+    }
 
+    private void showNormalDialog() {
+        /* @setIcon 设置对话框图标
+         * @setTitle 设置对话框标题
+         * @setMessage 设置对话框消息提示
+         * setXXX方法返回Dialog对象，因此可以链式设置属性
+         */
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(PlayerActivity.this);
+        normalDialog.setMessage("你的网络不是wifi，是否继续");
+        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                shouldAutoPlay = true;
+                player.setPlayWhenReady(shouldAutoPlay);
+                if(!player.isLoading()){
+                    // TODO: 2017/10/25 not start to play before on click
+                }
+            }
+        });
+        normalDialog.setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PlayerActivity.this.finish();
+            }
+        });
+        // 显示
+        normalDialog.show();
     }
 
 
