@@ -1,16 +1,12 @@
 package com.greata.greatasmartcam;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 
 import android.util.Log;
 
@@ -23,8 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
@@ -46,16 +40,17 @@ import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static final String DEVICE_TAG = "device_tag";
     private List<Map<String, Object>> mDatas;
     private Map<String, Object> mMap;
     SimpleAdapter mAdapter;
     ListView playList;
     LinearLayout myToolB;
     SwipeRefreshLayout mRefreshLayout;
-    SharedPreferences sPre;
 
     TextView noItemText;
     ImageView playImg;
+    ListDataSave mListDataSave;
 
     private static final String TAG = "ASYNC_TASK";
 
@@ -77,7 +72,9 @@ public class HomeActivity extends AppCompatActivity
             Log.i(TAG, "doInBackground(Params... params) called");
             try {
                 Thread.sleep(1000);
-                sPre = getSharedPreferences("devices", Context.MODE_PRIVATE);
+                List<Map<String, Object>> tempList = mListDataSave.getDataList(DEVICE_TAG);
+                mDatas.clear();
+                mDatas.addAll(tempList);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -119,7 +116,9 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         noItemText = (TextView) findViewById(R.id.noItemText);
+        noItemText.setVisibility(View.INVISIBLE);
         playImg = (ImageView) findViewById(R.id.play_img);
+        mListDataSave = new ListDataSave(this,"devices");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -135,7 +134,22 @@ public class HomeActivity extends AppCompatActivity
         mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
 
         playList.setAdapter(mAdapter);
+        mAdapter.setViewBinder(new SimpleAdapter.ViewBinder(){
+            public boolean setViewValue(View view, Object data,    
+                                String textRepresentation) {    
+        //判断是否为我们要处理的对象    
+        if(view instanceof ImageView ){
+            Log.d(TAG, "setViewValue: data"+Double.valueOf(textRepresentation).intValue());
 
+            ImageView iv = (ImageView) view;
+            Drawable mDrawable = getApplicationContext().getResources().getDrawable(Double.valueOf(textRepresentation).intValue());
+            iv.setImageDrawable(mDrawable);
+
+            return true;    
+        }else    
+        return false;    
+    }    
+        });
         myToolB = (LinearLayout) findViewById(R.id.home_toolbar);
         myToolB.setVisibility(View.INVISIBLE);
 
@@ -175,18 +189,15 @@ public class HomeActivity extends AppCompatActivity
         } else {
             noItemText.setVisibility(View.GONE);
         }
+        Log.d(TAG, "itemsCheck: "+mDatas.toString());
     }
 
     private void showPlay() {
-
-
-
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
             mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);
-
     }
 
 
@@ -262,10 +273,7 @@ public class HomeActivity extends AppCompatActivity
             intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            mMap = new HashMap<String, Object>();
-            mMap.put("screenshot", android.R.color.black);
-            mMap.put("name", "mathi");
-            mDatas.add(mMap);
+            addItem(android.R.color.black,"mathi");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             mDatas.clear();
@@ -281,6 +289,15 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void addItem(int imgID,String name) {
+        mMap = new HashMap<String, Object>();
+        mMap.put("screenshot", imgID);
+        Log.d(TAG, "addItem: imgid"+imgID);
+        mMap.put("name", name);
+        mDatas.add(mMap);
+        mListDataSave.setDataList(DEVICE_TAG,mDatas);
     }
 
     public void videoimgOnClick(View view) {
