@@ -120,7 +120,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-        // TODO: 2017/10/24 加载fragment
+        addPreferencesFromResource(R.xml.pref_general);
     }
     
     /**
