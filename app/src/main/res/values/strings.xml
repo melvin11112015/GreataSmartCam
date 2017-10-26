@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Greata Smart Cam</string>
+    <string name="app_name">鴻優視™智慧攝影機</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -71,16 +71,15 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">DeviceSettings</string>
+    <string name="title_activity_settings">設定</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
+    <string name="pref_title_social_recommendations">移動目標偵測提醒 </string>
+    <string name="pref_description_social_recommendations">當攝像機偵察到移動目標時，向手機通知發送提醒消息
     </string>
 
     <string name="pref_title_display_name">Display name</string>

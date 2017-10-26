@@ -4,33 +4,33 @@
     <group>
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/web_cam2_128px"
             android:checked="true"
+            android:icon="@drawable/web_cam2_128px"
             android:title="Web Cam" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
             android:checked="true"
-            android:title="Gallery" />
+            android:icon="@drawable/add_744pxpng"
+            android:title="新增設備" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
             android:checked="true"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="Slideshow" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/gear_128px"
             android:checked="true"
-            android:title="Settings" />
+            android:icon="@drawable/gear_128px"
+            android:title="設定" />
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
             android:checked="true"
+            android:icon="@drawable/ic_menu_share"
             android:title="Share" />
         <item
             android:id="@+id/nav_send"
-            android:icon="@drawable/ic_menu_send"
             android:checked="true"
+            android:icon="@drawable/ic_menu_send"
             android:title="Send" />
     </group>
 

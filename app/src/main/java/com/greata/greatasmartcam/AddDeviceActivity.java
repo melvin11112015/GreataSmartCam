@@ -16,7 +16,9 @@ import java.util.List;
 
 public class AddDeviceActivity extends AppCompatActivity {
 
-    private AddFragment f1, f2, f3;
+    List<String> list;
+    ArrayAdapter<String> adapter;
+    private AddFragment f0, f1, f2, f3;
     private FragmentManager fManager;
 
     @Override
@@ -24,38 +26,40 @@ public class AddDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        f0 = AddFragment.newInstance(R.layout.fragment_a);
         f1 = AddFragment.newInstance(R.layout.fragment_one);
         f2 = AddFragment.newInstance(R.layout.fragment_two);
         f3 = AddFragment.newInstance(R.layout.fragment_three);
         fManager = getFragmentManager();
-        fManager.beginTransaction().add(R.id.frameFragment, f1).commit();
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        List<String> list = new ArrayList<String>();
+        fManager.beginTransaction().add(R.id.frameFragment, f0).commit();
+        list = new ArrayList<String>();
 
         list.add("利优视Wifi");
         list.add("利优视Wifi HD版");
         list.add("利优云监控");
         list.add("利优云监控 S");
         list.add("利优云监控 2S");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
 
-        Spinner sp = (Spinner) f1.getView().findViewById(R.id.spinner);
-        sp.setAdapter(adapter);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
     public void onClick(View v) {
-        Intent intent = new Intent();
         switch (v.getId()) {
+            case R.id.button_next_0:
+                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).add(R.id.frameFragment, f1).addToBackStack(null).commit();
+                break;
             case R.id.button_next:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f1).add(R.id.frameFragment, f2).addToBackStack(null).commit();
+
+                Spinner sp = f1.getView().findViewById(R.id.spinner);
+                sp.setAdapter(adapter);
                 break;
             case R.id.button_next_2:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).add(R.id.frameFragment, f3).addToBackStack(null).commit();
@@ -70,7 +74,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                 finish();
                 return true;
             default:
-                ;
         }
         return super.onOptionsItemSelected(item);
     }
