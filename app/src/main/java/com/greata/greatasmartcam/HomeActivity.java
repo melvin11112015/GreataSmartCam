@@ -19,6 +19,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
@@ -43,6 +46,7 @@ public class HomeActivity extends AppCompatActivity
     public static final String DEVICE_TAG = "device_tag";
     private List<Map<String, Object>> mDatas;
     private Map<String, Object> mMap;
+    private static int checkedPos;
     SimpleAdapter mAdapter;
     ListView playList;
     LinearLayout myToolB;
@@ -118,7 +122,7 @@ public class HomeActivity extends AppCompatActivity
         noItemText = (TextView) findViewById(R.id.noItemText);
         noItemText.setVisibility(View.INVISIBLE);
         playImg = (ImageView) findViewById(R.id.play_img);
-        mListDataSave = new ListDataSave(this,"devices");
+        mListDataSave = new ListDataSave(this, "devices");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -134,35 +138,49 @@ public class HomeActivity extends AppCompatActivity
         mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
 
         playList.setAdapter(mAdapter);
-        mAdapter.setViewBinder(new SimpleAdapter.ViewBinder(){
-            public boolean setViewValue(View view, Object data,    
-                                String textRepresentation) {    
-        //判断是否为我们要处理的对象    
-        if(view instanceof ImageView ){
-            Log.d(TAG, "setViewValue: data"+Double.valueOf(textRepresentation).intValue());
+        mAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Object data,
+                                        String textRepresentation) {
+                //判断是否为我们要处理的对象
+                if (view instanceof ImageView) {
+                    Log.d(TAG, "setViewValue: data" + Double.valueOf(textRepresentation).intValue());
 
-            ImageView iv = (ImageView) view;
-            Drawable mDrawable = getApplicationContext().getResources().getDrawable(Double.valueOf(textRepresentation).intValue());
-            iv.setImageDrawable(mDrawable);
+                    ImageView iv = (ImageView) view;
+                    Drawable mDrawable = getApplicationContext().getResources().getDrawable(Double.valueOf(textRepresentation).intValue());
+                    iv.setImageDrawable(mDrawable);
 
-            return true;    
-        }else    
-        return false;    
-    }    
+                    return true;
+                } else
+                    return false;
+            }
         });
         myToolB = (LinearLayout) findViewById(R.id.home_toolbar);
         myToolB.setVisibility(View.INVISIBLE);
+        checkedPos = playList.getCheckedItemPosition();
+        playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        playList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                Toast.makeText(HomeActivity.this, "click " + i, Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(HomeActivity.this, "selected?" + playList.getSelectedItemPosition(), Toast.LENGTH_SHORT).show();
+                                                if (i == checkedPos) {
+                                                    hideToolbar(i);
+                                                } else {
+                                                    checkedPos = i;
+                                                    playList.setSelector(R.drawable.selector2);
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(HomeActivity.this,"click "+i,Toast.LENGTH_SHORT).show();
-                Toast.makeText(HomeActivity.this,"selected?"+playList.getSelectedItemPosition(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(HomeActivity.this,"checked?"+playList.getCheckedItemPosition(),Toast.LENGTH_SHORT).show();
+                                                    TranslateAnimation anim = new TranslateAnimation(0, 0, myToolB.getHeight(), 0f);
+                                                    anim.setDuration(500);
+                                                    myToolB.startAnimation(anim);
+                                                    myToolB.setVisibility(View.VISIBLE);
+                                                }
+                                                Toast.makeText(HomeActivity.this, "checked?" + playList.getCheckedItemPosition(), Toast.LENGTH_SHORT).show();
 
-            }
-        });
+                                            }
+                                        }
+
+        )
+        ;
 
         newMTask();
 
@@ -177,6 +195,16 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    private void hideToolbar(int i) {
+        playList.setItemChecked(i, false);
+        checkedPos = -1;
+        playList.setSelector(R.drawable.selector);
+        TranslateAnimation anim = new TranslateAnimation(0.0f, 0.0f, 0f, myToolB.getHeight());
+        anim.setDuration(500);
+        myToolB.startAnimation(anim);
+        myToolB.setVisibility(View.INVISIBLE);
+    }
+
     private void newMTask() {
         mTask = new MyTask();
         mTask.execute();
@@ -189,17 +217,16 @@ public class HomeActivity extends AppCompatActivity
         } else {
             noItemText.setVisibility(View.GONE);
         }
-        Log.d(TAG, "itemsCheck: "+mDatas.toString());
+        Log.d(TAG, "itemsCheck: " + mDatas.toString());
     }
 
     private void showPlay() {
-            Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
-            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
-            mIntent.setAction(PlayerActivity.ACTION_VIEW);
-            startActivity(mIntent);
+        Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
+        mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+        mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+        mIntent.setAction(PlayerActivity.ACTION_VIEW);
+        startActivity(mIntent);
     }
-
 
 
     @Override
@@ -253,6 +280,8 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (playList.getCheckedItemPosition() >= 0) {
+            hideToolbar(playList.getCheckedItemPosition());
         } else {
             super.onBackPressed();
         }
@@ -273,7 +302,7 @@ public class HomeActivity extends AppCompatActivity
             intent = new Intent(HomeActivity.this, AddDeviceActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black,"mathi");
+            addItem(android.R.color.black, "mathi");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             mDatas.clear();
@@ -291,13 +320,13 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    private void addItem(int imgID,String name) {
+    private void addItem(int imgID, String name) {
         mMap = new HashMap<String, Object>();
         mMap.put("screenshot", imgID);
-        Log.d(TAG, "addItem: imgid"+imgID);
+        Log.d(TAG, "addItem: imgid" + imgID);
         mMap.put("name", name);
         mDatas.add(mMap);
-        mListDataSave.setDataList(DEVICE_TAG,mDatas);
+        mListDataSave.setDataList(DEVICE_TAG, mDatas);
     }
 
     public void videoimgOnClick(View view) {

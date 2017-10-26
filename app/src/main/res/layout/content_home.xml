@@ -45,7 +45,10 @@
             android:layout_height="match_parent"
             android:cacheColorHint="@color/colorAccent"
             android:choiceMode="singleChoice"
-            android:drawSelectorOnTop="false" />
+            android:clickable="true"
+            android:divider="@android:color/holo_orange_light"
+            android:drawSelectorOnTop="false"
+            android:listSelector="@drawable/selector" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
