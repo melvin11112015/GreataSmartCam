@@ -75,8 +75,10 @@
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/side_nav_bar_reverse"
-                android:text="Button" />
+                android:background="@drawable/Play_378px"
+                android:backgroundTint="@android:color/white"
+                android:scaleX="0.35"
+                android:scaleY="0.85" />
 
             <Button
                 android:id="@+id/button3"
@@ -84,7 +86,10 @@
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/side_nav_bar_reverse"
+                android:background="@drawable/data_storage_595px"
+                android:backgroundTint="@android:color/white"
+                android:scaleX="0.35"
+                android:scaleY="0.8"
                 android:text="Button" />
 
             <Button
@@ -93,8 +98,10 @@
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/side_nav_bar_reverse"
-                android:text="Button" />
+                android:background="@drawable/ic_menu_manage"
+                android:backgroundTint="@android:color/white"
+                android:scaleX="0.33"
+                android:scaleY="0.75" />
 
             <Button
                 android:id="@+id/delete_btn"
@@ -106,7 +113,7 @@
                 android:backgroundTint="@android:color/white"
                 android:gravity="bottom"
                 android:onClick="delBtnOnClick"
-                android:scaleX="0.45"
+                android:scaleX="0.55"
                 android:scaleY="0.8" />
 
         </LinearLayout>
@@ -124,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:text="TextView"
+                android:text="觀看"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -135,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:text="TextView"
+                android:text="記錄"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -146,13 +153,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:text="TextView"
+                android:text="調整"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/delTxt"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

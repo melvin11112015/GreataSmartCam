@@ -48,15 +48,10 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:drawable/presence_video_away"
-            android:tint="@color/colorAccent" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@android:drawable/presence_audio_away"
+            android:background="@drawable/video_233px"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:scaleX="0.8"
+            android:scaleY="0.55"
             android:tint="@color/colorAccent" />
 
         <ImageButton
@@ -64,23 +59,44 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@android:drawable/ic_menu_camera"
+            android:background="@drawable/photo_camera_909"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:scaleX="0.9"
+            android:scaleY="0.7"
             android:tint="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/button5"
+        <ImageButton
+            android:id="@+id/imageButton4"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:text="Btn" />
+            android:background="@drawable/microphone_255"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:scaleX="0.65"
+            android:scaleY="0.9"
+            android:tint="@color/colorAccent" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/microphone_255"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:scaleX="0.65"
+            android:scaleY="0.9"
+            android:tint="@color/colorAccent" />
 
         <ImageButton
             android:id="@+id/lockscreen_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
+            android:background="@drawable/lockscreen"
+            android:backgroundTint="@android:color/holo_orange_dark"
             android:onClick="playerOnClick"
-            app:srcCompat="@android:drawable/ic_lock_lock" />
+            android:scaleX="0.8"
+            android:scaleY="0.8" />
     </LinearLayout>
 
 </RelativeLayout>
