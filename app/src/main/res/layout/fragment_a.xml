@@ -27,7 +27,7 @@
         android:layout_above="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
-        android:text="請查看攝像機是否"
+        android:text="請查看指示燈是否"
         android:textColor="@android:color/black"
         android:textSize="23sp" />
 

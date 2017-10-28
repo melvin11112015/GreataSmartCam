@@ -39,6 +39,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import android.widget.Toast;
@@ -182,6 +183,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
+    private ProgressBar mProgressBar;
+
     private Handler mainHandler;
 
     private EventLogger eventLogger;
@@ -191,6 +194,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private LinearLayout debugRootView;
 
     private TextView debugTextView;
+    private TextView playerTitle;
 
     private Button retryButton;
     private ImageButton lockScreenButton;
@@ -227,6 +231,32 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private ViewGroup adOverlayViewGroup;
     // Activity lifecycle
 
+    private static boolean isBehindLiveWindow(ExoPlaybackException e) {
+
+        if (e.type != ExoPlaybackException.TYPE_SOURCE) {
+
+            return false;
+
+        }
+
+        Throwable cause = e.getSourceException();
+
+        while (cause != null) {
+
+            if (cause instanceof BehindLiveWindowException) {
+
+                return true;
+
+            }
+
+            cause = cause.getCause();
+
+        }
+
+        return false;
+
+    }
+
     public void playerOnClick(View view) {
         switch (view.getId()) {
             case R.id.lockscreen_btn:
@@ -250,7 +280,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         return width > height;
     }
-
 
     @Override
 
@@ -292,14 +321,21 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         retryButton.setOnClickListener(this);
 
+        playerTitle = findViewById(R.id.player_title);
+        playerTitle.setText(getIntent().getCharSequenceExtra("title"));
 
         simpleExoPlayerView = findViewById(R.id.player_view);
         simpleExoPlayerView.hideController();
+
+        mProgressBar = findViewById(R.id.progressBar_play);
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         simpleExoPlayerView.setControllerVisibilityListener(this);
 
         simpleExoPlayerView.requestFocus();
         showNormalDialog();
+
+
     }
 
     private void showNormalDialog() {
@@ -331,7 +367,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         normalDialog.show();
     }
 
-
     @Override
 
     public void onNewIntent(Intent intent) {
@@ -345,7 +380,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         setIntent(intent);
 
     }
-
 
     @Override
 
@@ -361,7 +395,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onResume() {
@@ -375,7 +408,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         }
 
     }
-
 
     @Override
 
@@ -391,7 +423,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onStop() {
@@ -406,7 +437,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onDestroy() {
@@ -414,6 +444,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         super.onDestroy();
 
         releaseAdsLoader();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
     }
 
@@ -442,6 +473,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         Log.d("Test", "rotate");
     }
 
+
+    // Activity input
+
     @Override
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -463,8 +497,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // Activity input
-
+    // OnClickListener methods
 
     @Override
 
@@ -477,8 +510,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // OnClickListener methods
-
+    // PlaybackControlView.VisibilityListener implementation
 
     @Override
 
@@ -505,8 +537,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // PlaybackControlView.VisibilityListener implementation
-
+    // Internal methods
 
     @Override
 
@@ -515,10 +546,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         debugRootView.setVisibility(visibility);
 
     }
-
-
-    // Internal methods
-
 
     private void initializePlayer() {
 
@@ -734,7 +761,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
 
         int type = TextUtils.isEmpty(overrideExtension) ? Util.inferContentType(uri)
@@ -775,7 +801,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private DrmSessionManager<FrameworkMediaCrypto> buildDrmSessionManagerV18(UUID uuid,
 
                                                                               String licenseUrl, String[] keyRequestPropertiesArray) throws UnsupportedDrmException {
@@ -801,7 +826,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                 null, mainHandler, eventLogger);
 
     }
-
 
     private void releasePlayer() {
 
@@ -829,7 +853,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private void updateResumePosition() {
 
         resumeWindow = player.getCurrentWindowIndex();
@@ -838,7 +861,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private void clearResumePosition() {
 
         resumeWindow = C.INDEX_UNSET;
@@ -846,7 +868,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         resumePosition = C.TIME_UNSET;
 
     }
-
 
     /**
      * Returns a new DataSource factory.
@@ -865,7 +886,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     /**
      * Returns a new HttpDataSource factory.
      *
@@ -882,7 +902,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                 .buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
 
     }
-
 
     /**
      * Returns an ads media source, reusing the ads loader if one exists.
@@ -929,6 +948,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
+    // Player.EventListener implementation
+
     private void releaseAdsLoader() {
 
         if (imaAdsLoader != null) {
@@ -959,18 +980,18 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
-    // Player.EventListener implementation
-
-
     @Override
 
     public void onLoadingChanged(boolean isLoading) {
 
         // Do nothing.
+        if (isLoading) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
 
     }
-
 
     @Override
 
@@ -986,7 +1007,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onRepeatModeChanged(int repeatMode) {
@@ -994,7 +1014,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         // Do nothing.
 
     }
-
 
     @Override
 
@@ -1014,7 +1033,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
@@ -1023,7 +1041,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     @Override
 
     public void onTimelineChanged(Timeline timeline, Object manifest) {
@@ -1031,7 +1048,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         // Do nothing.
 
     }
-
 
     @Override
 
@@ -1110,6 +1126,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
+    // User controls
+
     @Override
 
     @SuppressWarnings("ReferenceEquality")
@@ -1147,10 +1165,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         }
 
     }
-
-
-    // User controls
-
 
     private void updateButtonVisibilities() {
 
@@ -1228,13 +1242,11 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private void showControls() {
 
         debugRootView.setVisibility(View.VISIBLE);
 
     }
-
 
     private void showToast(int messageId) {
 
@@ -1242,37 +1254,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
     private void showToast(String message) {
 
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-    }
-
-
-    private static boolean isBehindLiveWindow(ExoPlaybackException e) {
-
-        if (e.type != ExoPlaybackException.TYPE_SOURCE) {
-
-            return false;
-
-        }
-
-        Throwable cause = e.getSourceException();
-
-        while (cause != null) {
-
-            if (cause instanceof BehindLiveWindowException) {
-
-                return true;
-
-            }
-
-            cause = cause.getCause();
-
-        }
-
-        return false;
 
     }
 

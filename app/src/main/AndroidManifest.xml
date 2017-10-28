@@ -32,11 +32,14 @@
         <activity android:name=".AddDeviceActivity" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
 
         <service
             android:name=".MoveInspectionService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".SplashActivity"></activity>
     </application>
 
 </manifest>

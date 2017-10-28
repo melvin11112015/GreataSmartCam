@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
-
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final String DEVICE_TAG = "device_tag";
@@ -194,11 +192,16 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void showPlay() {
-        Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
-        mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-        mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
-        mIntent.setAction(PlayerActivity.ACTION_VIEW);
-        startActivity(mIntent);
+        if (NetWorkUtils.isNetworkConnected(this)) {
+            Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
+            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            mIntent.putExtra("title", "this is title");
+            mIntent.setAction(PlayerActivity.ACTION_VIEW);
+            startActivity(mIntent);
+        } else {
+            Toast.makeText(this, "無法連結網路，請檢查網路設定", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -269,13 +272,14 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mathi");
+            addItem(android.R.color.black, "mathi", true);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_share) {
-
+            intent = new Intent(HomeActivity.this, HelpActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
             intent = new Intent(HomeActivity.this, MoveInspectionService.class);
             startService(intent);
@@ -300,11 +304,12 @@ public class HomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void addItem(int imgID, String name) {
+    private void addItem(int imgID, String name, boolean state) {
         mMap = new HashMap<String, Object>();
         mMap.put("screenshot", imgID);
         Log.d(TAG, "addItem: imgid" + imgID);
         mMap.put("name", name);
+        mMap.put("state", state);
         mDatas.add(mMap);
         mListDataSave.setDataList(DEVICE_TAG, mDatas);
     }

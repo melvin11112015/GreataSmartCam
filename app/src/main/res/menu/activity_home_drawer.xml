@@ -25,13 +25,13 @@
         <item
             android:id="@+id/nav_share"
             android:checked="true"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Share" />
+            android:icon="@drawable/help_458px"
+            android:title="常見問題" />
         <item
             android:id="@+id/nav_send"
             android:checked="true"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Send" />
+            android:icon="@drawable/information_473px"
+            android:title="關於程式" />
     </group>
 
 </menu>

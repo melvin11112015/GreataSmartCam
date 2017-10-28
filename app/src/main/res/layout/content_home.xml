@@ -47,7 +47,6 @@
             android:cacheColorHint="@color/colorAccent"
             android:choiceMode="singleChoice"
             android:clickable="true"
-            android:divider="@android:color/holo_orange_light"
             android:drawSelectorOnTop="false"
             android:listSelector="@drawable/selector" />
 

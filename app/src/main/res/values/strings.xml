@@ -143,4 +143,20 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string-array name="list_help_q">
+        <item>應用程式和攝像機的配對方法</item>
+        <item>操作恢復出廠設定</item>
+        <item>WiFi連接不上的原因</item>
+    </string-array>
+    <string-array name="list_help_a">
+        <item>先在手機上安裝並打開APP，然後開WIFI，等紅色指示燈閃爍了，點擊APP介面底部相機圖標，找到格式為“GREATA_xxxxxxx”設備WIFI就行咯，初始密碼為1234567890。
+            如果親不幸發現了好多熱點，那就只能關機取下電池蓋，在電池倉裏找到序號，後七位就是相機的WIFI名字。然後重複以上步驟。
+            相機和手機APP一定要先連接好，然後點擊連接介面右上角的設定圖標，找到“WIFI資訊設定”就可以修改WiFi密碼和名稱了。最後等待相機自行重啓完畢就可以</item>
+        <item>相機連接手機APP後在設定選單裏找恢復出廠設定選項，或者長按相機電源鍵和WIFI按鍵，聽到一聲滴聲就可以了呢。
+            建議正常情况下還是通過手機APP來操作最好</item>
+        <item>1、手機APP是不是最新版，2、相機WIFI是不是沒有打開，WIFI藍色指示燈是否閃爍；3、手機APP是不是連接到別的相機WIFI；
+            4、手機APP是不是輸入了錯誤的WIFI密碼；5、請確認在有效距離100米以內，相機和APP是不是已經連接了；
+            6、看看附近是不是有很多無線熱點干擾；如果以上操作都無效，那麼只能試試萬能的恢復出廠設定了</item>
+    </string-array>
 </resources>

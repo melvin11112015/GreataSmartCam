@@ -52,6 +52,16 @@
         app:controller_layout_id="@layout/exo_playback_control_view" />
 
 
+    <ProgressBar
+        android:id="@+id/progressBar_play"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
     <LinearLayout
 
         android:layout_width="match_parent"

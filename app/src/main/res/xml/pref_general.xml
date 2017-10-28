@@ -6,28 +6,25 @@
         android:summary="@string/pref_description_social_recommendations"
         android:title="@string/pref_title_social_recommendations" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="example_switch2"
+        android:summary="開啟後，截圖和錄影數據將存儲到攝像機的外置記憶體。關閉則存儲到手機中。  "
+        android:title="數據存儲到攝像機外置記憶體" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="example_switch3"
+        android:summary="允許Greata收集用戶匿名數據用作改善服務體驗，並不會導致個人私隱資訊洩露 "
+        android:title="傳輸匿名數據" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="example_switch4"
+        android:summary="接收促銷資訊推送，及時獲得優惠產品詳情  "
+        android:title="促銷資訊推送" />
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
-        android:inputType="textCapWords"
-        android:key="example_text"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title_display_name" />
-
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
 
 </PreferenceScreen>

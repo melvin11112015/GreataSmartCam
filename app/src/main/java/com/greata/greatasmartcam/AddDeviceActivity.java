@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -23,12 +24,15 @@ public class AddDeviceActivity extends AppCompatActivity {
     private AddFragment f0, f1, f2, f3;
     private FragmentManager fManager;
     private ImageView lightView;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("根據提示新增攝像機 ");
         f0 = AddFragment.newInstance(R.layout.fragment_a);
         f1 = AddFragment.newInstance(R.layout.fragment_one);
         f2 = AddFragment.newInstance(R.layout.fragment_two);
