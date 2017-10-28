@@ -3,11 +3,13 @@ package com.greata.greatasmartcam;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     private AddFragment f0, f1, f2, f3;
     private FragmentManager fManager;
+    private ImageView lightView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +50,21 @@ public class AddDeviceActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        if (f0 != null) {
+            lightView = f0.getView().findViewById(R.id.light_view);
+            AnimationDrawable animationDrawable = (AnimationDrawable) lightView.getDrawable();
+            animationDrawable.start();
+        }
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_next_0:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).add(R.id.frameFragment, f1).addToBackStack(null).commit();
+
                 break;
             case R.id.button_next:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f1).add(R.id.frameFragment, f2).addToBackStack(null).commit();
-
                 Spinner sp = f1.getView().findViewById(R.id.spinner);
                 sp.setAdapter(adapter);
                 break;
@@ -71,7 +78,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
             default:
         }

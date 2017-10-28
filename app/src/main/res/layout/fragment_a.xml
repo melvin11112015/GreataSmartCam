@@ -67,11 +67,30 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_next_0"
-        android:layout_marginBottom="134dp"
-        android:layout_toEndOf="@+id/textView14"
-        android:layout_toRightOf="@+id/textView14"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/button_next_0"
+        android:layout_toRightOf="@+id/button_next_0"
         android:text="指示燈"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/light_view"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="1dp"
+        app:srcCompat="@drawable/light_animation" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="70dp"
+        android:layout_height="3dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/light_view"
+        android:layout_toRightOf="@+id/light_view"
+        app:srcCompat="@drawable/red_line" />
 </RelativeLayout>

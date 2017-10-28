@@ -75,7 +75,7 @@
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/Play_378px"
+                android:background="@drawable/play_378px"
                 android:backgroundTint="@android:color/white"
                 android:scaleX="0.35"
                 android:scaleY="0.85" />

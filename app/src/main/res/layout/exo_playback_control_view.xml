@@ -20,6 +20,9 @@
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
             android:background="@android:drawable/ic_menu_revert"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:scaleX="0.8"
+            android:scaleY="0.9"
             android:tint="@color/colorAccent" />
 
         <TextView
