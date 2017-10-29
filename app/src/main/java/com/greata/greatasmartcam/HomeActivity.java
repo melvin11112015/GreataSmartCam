@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -282,8 +283,17 @@ public class HomeActivity extends AppCompatActivity
             intent = new Intent(HomeActivity.this, HelpActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-            intent = new Intent(HomeActivity.this, MoveInspectionService.class);
-            startService(intent);
+            final AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+            alertDialog.show();
+            Window window = alertDialog.getWindow();
+            window.setContentView(R.layout.info_dialog);
+            Button dialogButton = window.findViewById(R.id.mydialog_ok);
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    alertDialog.cancel();
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

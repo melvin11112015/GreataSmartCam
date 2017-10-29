@@ -11,12 +11,20 @@
 
 
     <string name="video">Video</string>
+    <string name="copyright">Copyright © 2011-2017 鴻亞國際有限公司</string>
 
 
     <string name="audio">Audio</string>
 
 
     <string name="text">Text</string>
+    <string name="dialog_contact">
+        \ 電子郵箱:service@greata.com.tw \n
+        官方網站:www.greata.com.tw \n
+        客服熱線: \n
+        公司地址: \n
+        Facebook:greata_international \n
+        Twitter:greata_international  </string>
 
 
     <string name="retry">Retry</string>
