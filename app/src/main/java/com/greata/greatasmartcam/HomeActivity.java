@@ -160,8 +160,8 @@ public class HomeActivity extends AppCompatActivity
          */
         final AlertDialog.Builder delDialog =
                 new AlertDialog.Builder(HomeActivity.this);
-        delDialog.setMessage("delete?" + mDatas.get(checkedPos).get("name"));
-        delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        delDialog.setMessage("請確認移除" + mDatas.get(checkedPos).get("name") + "?");
+        delDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -172,10 +172,14 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
-        delDialog.setNegativeButton("关闭", null);
+        delDialog.setNegativeButton("取消", null);
         // 显示
         delDialog.show();
 
+    }
+
+    public void googleReq(View v) {
+        Toast.makeText(this, "錯誤:沒有檢測到 Google Play 服務 ", Toast.LENGTH_SHORT).show();
     }
 
     private void newMTask() {

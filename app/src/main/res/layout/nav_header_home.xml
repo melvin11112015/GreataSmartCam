@@ -5,18 +5,29 @@
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:background="@drawable/web_cam2_128px"
+        android:backgroundTint="@android:color/white"
+        android:onClick="googleReq" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:onClick="googleReq"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="没决定写什么"
+        android:text="未登錄"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </LinearLayout>
