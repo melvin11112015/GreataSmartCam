@@ -6,32 +6,60 @@
     android:layout_height="match_parent"
     tools:context="com.greata.greatasmartcam.SplashActivity">
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="190dp"
+            android:layout_alignParentTop="true"
+
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="25dp"
+            app:srcCompat="@drawable/bg" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_margin="10dp"
+            android:text="智慧家庭監視助手 "
+            android:textColor="@android:color/white"
+            android:textSize="35sp" />
+
+    </FrameLayout>
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/imageView4"
-        android:layout_toStartOf="@+id/imageView4"
+        android:layout_below="@+id/frameLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
         app:srcCompat="@drawable/logo" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/imageView2"
-        android:layout_marginTop="20dp"
+        android:layout_alignBottom="@+id/cpright"
+        android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/logo2" />
 
-    <ImageView
-        android:id="@+id/imageView5"
+    <TextView
+        android:id="@+id/cpright"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView4"
-        app:srcCompat="@drawable/bg" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="Copyright © 2011-2017 鴻亞國際有限公司"
+        android:textSize="15sp" />
 
 </RelativeLayout>
