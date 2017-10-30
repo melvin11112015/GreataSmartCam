@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -124,6 +125,10 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 
 import java.lang.reflect.Method;
@@ -270,6 +275,28 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         }
     }
 
+    public void saveBitmap() {
+        Log.e("save", "保存图片");
+        File f = new File(this.getExternalFilesDir(null), Long.toString(System.currentTimeMillis()) + ".png");
+        if (f.exists()) {
+            f.delete();
+        }
+        try {
+
+            //Bitmap bm = simpleExoPlayerView.getBitmap();
+            FileOutputStream out = new FileOutputStream(f);
+            //bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+            Log.i("save", "已经保存");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     public boolean isLandscape() {
         /*   * 通过API动态改变当前屏幕的显示方向   */
 
