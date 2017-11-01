@@ -69,6 +69,13 @@ public class HomeActivity extends AppCompatActivity
         private Context context;
         private List<Map<String, Object>> dataList;
 
+
+        public void setLoading(boolean loading) {
+            isLoading = loading;
+        }
+
+        private boolean isLoading;
+
         public MyAdapter(Context context, List dataList) {
             super();
             this.context = context;
@@ -101,6 +108,7 @@ public class HomeActivity extends AppCompatActivity
                 //final TextView idTextView = (TextView) view.findViewById(R.id.id_num);
                 holder.idTextView = convertView.findViewById(R.id.id_num);
                 holder.videoImage = convertView.findViewById(R.id.video_img);
+                holder.playImage = convertView.findViewById(R.id.play_img);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -110,8 +118,15 @@ public class HomeActivity extends AppCompatActivity
                 holder.idTextView.setText((String) data.get("name"));
                 if ((boolean) data.get("state")) {
                     holder.videoImage.setImageResource(android.R.color.black);
+                    holder.playImage.setImageResource(android.R.drawable.ic_media_play);
                 } else {
-                    holder.videoImage.setImageResource(android.R.color.holo_green_light);
+                    holder.videoImage.setImageResource(android.R.color.darker_gray);
+                    holder.playImage.setImageResource(R.drawable.power_shutdown);
+                }
+                if (this.isLoading) {
+                    holder.playImage.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.playImage.setVisibility(View.VISIBLE);
                 }
             }
             return convertView;
@@ -122,6 +137,7 @@ public class HomeActivity extends AppCompatActivity
     static class ViewHolder {
         TextView idTextView;
         ImageView videoImage;
+        ImageView playImage;
     }
 
     @Override
@@ -300,6 +316,8 @@ public class HomeActivity extends AppCompatActivity
                 mProgressMenu.setIcon(android.R.drawable.ic_popup_sync);
             }
         }
+        mAdapter.setLoading(refreshing);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
