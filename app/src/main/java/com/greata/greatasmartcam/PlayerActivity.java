@@ -290,10 +290,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             out.close();
             Log.i("save", "已经保存");
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

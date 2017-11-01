@@ -64,90 +64,6 @@ public class HomeActivity extends AppCompatActivity
 
     private MyAdapter mAdapter;
 
-    class MyAdapter extends BaseAdapter {
-
-        private Context context;
-        private List<Map<String, Object>> dataList;
-
-
-        public void setLoading(boolean loading) {
-            isLoading = loading;
-        }
-
-        private boolean isLoading;
-
-        public MyAdapter(Context context, List dataList) {
-            super();
-            this.context = context;
-            this.dataList = dataList;
-        }
-
-        @Override
-        public int getCount() {
-            return dataList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            ViewHolder holder = null;
-            if (convertView == null) {
-                //View view = inflater.inflate(R.layout.item_home, null);
-                convertView = inflater.inflate(R.layout.item_home, null);
-                holder = new ViewHolder();
-                //final TextView idTextView = (TextView) view.findViewById(R.id.id_num);
-                holder.idTextView = convertView.findViewById(R.id.id_num);
-                holder.videoImage = convertView.findViewById(R.id.video_img);
-                holder.playImage = convertView.findViewById(R.id.play_img);
-                holder.stateTextView = convertView.findViewById(R.id.state_text);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            Map<String, Object> data = dataList.get(position);
-            if (data != null) {
-                holder.idTextView.setText((String) data.get("name"));
-                if ((boolean) data.get("state")) {
-                    holder.videoImage.setImageResource(android.R.color.black);
-                    holder.playImage.setImageResource(android.R.drawable.ic_media_play);
-                    holder.stateTextView.setText("線上");
-                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                } else {
-                    holder.videoImage.setImageResource(android.R.color.darker_gray);
-                    holder.playImage.setImageResource(R.drawable.power_shutdown);
-                    holder.stateTextView.setText("離線");
-                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-                }
-                if (this.isLoading) {
-                    holder.playImage.setVisibility(View.INVISIBLE);
-                    holder.stateTextView.setVisibility(View.INVISIBLE);
-                } else {
-                    holder.playImage.setVisibility(View.VISIBLE);
-                    holder.stateTextView.setVisibility(View.VISIBLE);
-                }
-            }
-            return convertView;
-        }
-
-    }
-
-    static class ViewHolder {
-        TextView idTextView;
-        ImageView videoImage;
-        ImageView playImage;
-        TextView stateTextView;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,6 +157,14 @@ public class HomeActivity extends AppCompatActivity
         HomeActivity.this.myToolB.setVisibility(View.INVISIBLE);
     }
 
+    public void recBtnOnClick(View v) {
+        if (checkedPos < 0) return;
+        Intent intent = new Intent();
+        intent.putExtra("state", (boolean) mDatas.get(checkedPos).get("state"));
+        intent.setClass(HomeActivity.this, RecordActivity.class);
+        startActivity(intent);
+    }
+
     public void delBtnOnClick(View v) {
         if (checkedPos < 0) return;
         /* @setIcon 设置对话框图标
@@ -299,7 +223,6 @@ public class HomeActivity extends AppCompatActivity
             Toast.makeText(this, "無法連結網路，請檢查網路設定", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     protected void onStart() {
@@ -370,7 +293,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mat2i", false);
+            addItem(android.R.color.black, "mat3i", true);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
@@ -423,7 +346,89 @@ public class HomeActivity extends AppCompatActivity
 
     public void videoimgOnClick(View view) {
         Toast.makeText(HomeActivity.this, "toast video", Toast.LENGTH_SHORT).show();
-        // TODO: 2017/10/13 use listener and hide buttons bar
+        // TODO: 2017/10/13 use listener
+    }
+
+    static class ViewHolder {
+        TextView idTextView;
+        ImageView videoImage;
+        ImageView playImage;
+        TextView stateTextView;
+    }
+
+    class MyAdapter extends BaseAdapter {
+
+        private Context context;
+        private List<Map<String, Object>> dataList;
+        private boolean isLoading;
+
+        public MyAdapter(Context context, List dataList) {
+            super();
+            this.context = context;
+            this.dataList = dataList;
+        }
+
+        public void setLoading(boolean loading) {
+            isLoading = loading;
+        }
+
+        @Override
+        public int getCount() {
+            return dataList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            ViewHolder holder = null;
+            if (convertView == null) {
+                //View view = inflater.inflate(R.layout.item_home, null);
+                convertView = inflater.inflate(R.layout.item_home, null);
+                holder = new ViewHolder();
+                //final TextView idTextView = (TextView) view.findViewById(R.id.id_num);
+                holder.idTextView = convertView.findViewById(R.id.id_num);
+                holder.videoImage = convertView.findViewById(R.id.video_img);
+                holder.playImage = convertView.findViewById(R.id.play_img);
+                holder.stateTextView = convertView.findViewById(R.id.state_text);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            Map<String, Object> data = dataList.get(position);
+            if (data != null) {
+                holder.idTextView.setText((String) data.get("name"));
+                if ((boolean) data.get("state")) {
+                    holder.videoImage.setImageResource(android.R.color.black);
+                    holder.playImage.setImageResource(android.R.drawable.ic_media_play);
+                    holder.stateTextView.setText("線上");
+                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                } else {
+                    holder.videoImage.setImageResource(android.R.color.darker_gray);
+                    holder.playImage.setImageResource(R.drawable.power_shutdown);
+                    holder.stateTextView.setText("離線");
+                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+                }
+                if (this.isLoading) {
+                    holder.playImage.setVisibility(View.INVISIBLE);
+                    holder.stateTextView.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.playImage.setVisibility(View.VISIBLE);
+                    holder.stateTextView.setVisibility(View.VISIBLE);
+                }
+            }
+            return convertView;
+        }
+
     }
 
     private class MyTask extends AsyncTask<String, Integer, String> {
@@ -432,7 +437,6 @@ public class HomeActivity extends AppCompatActivity
         protected void onPreExecute() {
             Log.i(TAG, "onPreExecute() called");
             setLoadingState(true);
-            // TODO: 2017/10/19 change playImg while refreshing
             //playImg.setImageDrawable();
         }
 

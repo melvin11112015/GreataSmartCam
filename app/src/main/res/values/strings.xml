@@ -167,4 +167,6 @@
             4、手機APP是不是輸入了錯誤的WIFI密碼；5、請確認在有效距離100米以內，相機和APP是不是已經連接了；
             6、看看附近是不是有很多無線熱點干擾；如果以上操作都無效，那麼只能試試萬能的恢復出廠設定了</item>
     </string-array>
+    <string name="title_activity_record">RecordActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
