@@ -18,6 +18,17 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:id="@+id/state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/video_img"
+        android:layout_alignTop="@+id/video_img"
+        android:background="@android:color/holo_blue_light"
+        android:elevation="1dp"
+        android:text="TextView"
+        android:textColor="@android:color/white" />
+
     <ImageView
         android:id="@+id/video_img"
         android:layout_width="128dp"
@@ -43,4 +54,5 @@
         android:layout_marginStart="48dp"
         android:tint="@android:color/holo_orange_dark"
         app:srcCompat="@android:drawable/ic_media_play" />
+
 </RelativeLayout>

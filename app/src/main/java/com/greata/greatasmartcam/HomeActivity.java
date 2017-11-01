@@ -109,6 +109,7 @@ public class HomeActivity extends AppCompatActivity
                 holder.idTextView = convertView.findViewById(R.id.id_num);
                 holder.videoImage = convertView.findViewById(R.id.video_img);
                 holder.playImage = convertView.findViewById(R.id.play_img);
+                holder.stateTextView = convertView.findViewById(R.id.state_text);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -119,14 +120,20 @@ public class HomeActivity extends AppCompatActivity
                 if ((boolean) data.get("state")) {
                     holder.videoImage.setImageResource(android.R.color.black);
                     holder.playImage.setImageResource(android.R.drawable.ic_media_play);
+                    holder.stateTextView.setText("線上");
+                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
                 } else {
                     holder.videoImage.setImageResource(android.R.color.darker_gray);
                     holder.playImage.setImageResource(R.drawable.power_shutdown);
+                    holder.stateTextView.setText("離線");
+                    holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
                 }
                 if (this.isLoading) {
                     holder.playImage.setVisibility(View.INVISIBLE);
+                    holder.stateTextView.setVisibility(View.INVISIBLE);
                 } else {
                     holder.playImage.setVisibility(View.VISIBLE);
+                    holder.stateTextView.setVisibility(View.VISIBLE);
                 }
             }
             return convertView;
@@ -138,6 +145,7 @@ public class HomeActivity extends AppCompatActivity
         TextView idTextView;
         ImageView videoImage;
         ImageView playImage;
+        TextView stateTextView;
     }
 
     @Override
