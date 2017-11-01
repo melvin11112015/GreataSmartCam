@@ -1,5 +1,6 @@
 package com.greata.greatasmartcam;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,9 +23,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -46,7 +50,7 @@ public class HomeActivity extends AppCompatActivity
     public static final String DEVICE_TAG = "device_tag";
     private static final String TAG = "ASYNC_TASK";
     private static int checkedPos;
-    SimpleAdapter mAdapter;
+    //SimpleAdapter mAdapter;
     ListView playList;
     LinearLayout myToolB;
     SwipeRefreshLayout mRefreshLayout;
@@ -57,6 +61,68 @@ public class HomeActivity extends AppCompatActivity
     MenuItem mProgressMenu;
     private List<Map<String, Object>> mDatas;
     private Map<String, Object> mMap;
+
+    private MyAdapter mAdapter;
+
+    class MyAdapter extends BaseAdapter {
+
+        private Context context;
+        private List<Map<String, Object>> dataList;
+
+        public MyAdapter(Context context, List dataList) {
+            super();
+            this.context = context;
+            this.dataList = dataList;
+        }
+
+        @Override
+        public int getCount() {
+            return dataList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            ViewHolder holder = null;
+            if (convertView == null) {
+                //View view = inflater.inflate(R.layout.item_home, null);
+                convertView = inflater.inflate(R.layout.item_home, null);
+                holder = new ViewHolder();
+                //final TextView idTextView = (TextView) view.findViewById(R.id.id_num);
+                holder.idTextView = convertView.findViewById(R.id.id_num);
+                holder.videoImage = convertView.findViewById(R.id.video_img);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            Map<String, Object> data = dataList.get(position);
+            if (data != null) {
+                holder.idTextView.setText((String) data.get("name"));
+                if ((boolean) data.get("state")) {
+                    holder.videoImage.setImageResource(android.R.color.black);
+                } else {
+                    holder.videoImage.setImageResource(android.R.color.holo_green_light);
+                }
+            }
+            return convertView;
+        }
+
+    }
+
+    static class ViewHolder {
+        TextView idTextView;
+        ImageView videoImage;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +148,10 @@ public class HomeActivity extends AppCompatActivity
         playList = (ListView) findViewById(R.id.play_list);
 
         mDatas = new ArrayList<Map<String, Object>>();
-        mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
-
+        // mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
+        mAdapter = new MyAdapter(this, mDatas);
         playList.setAdapter(mAdapter);
-        mAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+       /* mAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             public boolean setViewValue(View view, Object data,
                                         String textRepresentation) {
                 //判断是否为我们要处理的对象
@@ -100,7 +166,7 @@ public class HomeActivity extends AppCompatActivity
                 } else
                     return false;
             }
-        });
+        });*/
         myToolB = (LinearLayout) findViewById(R.id.home_toolbar);
         myToolB.setVisibility(View.INVISIBLE);
         checkedPos = playList.getCheckedItemPosition();
@@ -278,7 +344,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mathi", true);
+            addItem(android.R.color.black, "mat2i", false);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
