@@ -37,6 +37,8 @@ public class AddDeviceActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private EditText editSSID;
     private List<String> ssidList;
+    private Spinner sp;
+    private ListPopupWindow listPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,9 @@ public class AddDeviceActivity extends AppCompatActivity {
         f2 = AddFragment.newInstance(R.layout.fragment_two);
         f3 = AddFragment.newInstance(R.layout.fragment_three);
         fManager = getFragmentManager();
-        fManager.beginTransaction().add(R.id.frameFragment, f0).add(R.id.frameFragment, f1).hide(f1).add(R.id.frameFragment, f2).hide(f2).add(R.id.frameFragment, f3).hide(f3).commit();
+        fManager.beginTransaction().add(R.id.frameFragment, f0).add(R.id.frameFragment, f1).add(R.id.frameFragment, f2).add(R.id.frameFragment, f3).commit();
+
+
         list = new ArrayList<String>();
 
         list.add("利优视Wifi");
@@ -61,8 +65,56 @@ public class AddDeviceActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
 
-        (new WifiTask()).execute();
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (lightView == null) {
+            lightView = f0.getView().findViewById(R.id.light_view);
+            AnimationDrawable animationDrawable = (AnimationDrawable) lightView.getDrawable();
+            animationDrawable.start();
+        }
+        if (sp == null) {
+            sp = f1.getView().findViewById(R.id.spinner);
+            sp.setAdapter(adapter);
+        }
+        if (editSSID == null) {
+            editSSID = f3.getView().findViewById(R.id.edit_ssid);
+            (new WifiTask()).execute();
+        }
+        fManager.beginTransaction().hide(f1).hide(f2).hide(f3).commit();
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_next_0:
+                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f1).addToBackStack(null).commit();
+
+                break;
+            case R.id.button_next:
+                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f1).show(f2).addToBackStack(null).commit();
+
+
+                break;
+            case R.id.button_next_2:
+                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).show(f3).addToBackStack(null).commit();
+
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class WifiTask extends AsyncTask<String, Integer, String> {
@@ -70,7 +122,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             Log.i(WIFI, "onPreExecute() called");
-            //playImg.setImageDrawable();
+
         }
 
         //doInBackground方法内部执行后台任务,不可在此方法内修改UI
@@ -81,9 +133,15 @@ public class AddDeviceActivity extends AppCompatActivity {
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
                 ssidList = new ArrayList<String>();
                 List<WifiConfiguration> wifiConfigurationList = wifiManager.getConfiguredNetworks();
+                if (wifiConfigurationList != null) {
+
+
                 for (int i = 0; i < wifiConfigurationList.size(); i++) {
                     Log.d(WIFI, "" + wifiConfigurationList.get(i).SSID);
                     ssidList.add(wifiConfigurationList.get(i).SSID);
+                }
+                    Log.d(WIFI, "doInBackground: EDITSSID=NULL?");
+                    Log.d(WIFI, "doInBackground: EDITSSID!=NULL");
                 }
             } catch (Exception e) {
                 Log.e(WIFI, e.getMessage());
@@ -101,11 +159,13 @@ public class AddDeviceActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.i(WIFI, "onPostExecute(Result result) called");
-            editSSID.setOnTouchListener(new View.OnTouchListener() {
+
+
+            /*editSSID.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        ListPopupWindow listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
+                        listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
                         listPopupWindow.setAdapter(new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_list_item_1, ssidList));
                         listPopupWindow.setAnchorView(editSSID);
                         listPopupWindow.setModal(true);
@@ -119,7 +179,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                     }
                     return false;
                 }
-            });
+            });*/
         }
 
         //onCancelled方法用于在取消执行中的任务时更改UI
@@ -128,48 +188,5 @@ public class AddDeviceActivity extends AppCompatActivity {
             Log.i(WIFI, "onCancelled() called");
 
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (f0 != null) {
-            lightView = f0.getView().findViewById(R.id.light_view);
-            AnimationDrawable animationDrawable = (AnimationDrawable) lightView.getDrawable();
-            animationDrawable.start();
-        }
-
-
-    }
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_next_0:
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f1).addToBackStack(null).commit();
-                Spinner sp = f1.getView().findViewById(R.id.spinner);
-                sp.setAdapter(adapter);
-                break;
-            case R.id.button_next:
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f1).show(f2).addToBackStack(null).commit();
-
-
-                break;
-            case R.id.button_next_2:
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).add(R.id.frameFragment, f3).addToBackStack(null).commit();
-
-                break;
-        }
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
