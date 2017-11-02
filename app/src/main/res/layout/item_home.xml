@@ -9,14 +9,28 @@
     <TextView
         android:id="@+id/id_num"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="63dp"
         android:layout_marginRight="63dp"
         android:gravity="center"
         android:text="1"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/model_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignBottom="@+id/video_img"
+        android:layout_alignEnd="@+id/id_num"
+        android:layout_alignRight="@+id/id_num"
+        android:layout_marginEnd="19dp"
+        android:layout_marginRight="19dp"
+        android:text="TextView" />
 
     <TextView
         android:id="@+id/state_text"

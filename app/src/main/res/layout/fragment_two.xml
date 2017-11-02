@@ -24,7 +24,7 @@
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_ssid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -32,7 +32,8 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text=""
+        android:drawableRight="@android:drawable/ic_menu_add" />
 
     <TextView
         android:id="@+id/textView5"

@@ -293,7 +293,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mat3i", true);
+            addItem(android.R.color.black, "mat3i", true, "鴻優視智慧攝像機1080P");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
@@ -334,12 +334,13 @@ public class HomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void addItem(int imgID, String name, boolean state) {
+    private void addItem(int imgID, String name, boolean state, String model) {
         mMap = new HashMap<String, Object>();
         mMap.put("screenshot", imgID);
         Log.d(TAG, "addItem: imgid" + imgID);
         mMap.put("name", name);
         mMap.put("state", state);
+        mMap.put("model", model);
         mDatas.add(mMap);
         mListDataSave.setDataList(DEVICE_TAG, mDatas);
     }
@@ -354,6 +355,7 @@ public class HomeActivity extends AppCompatActivity
         ImageView videoImage;
         ImageView playImage;
         TextView stateTextView;
+        TextView modelTextView;
     }
 
     class MyAdapter extends BaseAdapter {
@@ -400,6 +402,7 @@ public class HomeActivity extends AppCompatActivity
                 holder.videoImage = convertView.findViewById(R.id.video_img);
                 holder.playImage = convertView.findViewById(R.id.play_img);
                 holder.stateTextView = convertView.findViewById(R.id.state_text);
+                holder.modelTextView = convertView.findViewById(R.id.model_code);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -407,6 +410,7 @@ public class HomeActivity extends AppCompatActivity
             Map<String, Object> data = dataList.get(position);
             if (data != null) {
                 holder.idTextView.setText((String) data.get("name"));
+                holder.modelTextView.setText((String) data.get("model"));
                 if ((boolean) data.get("state")) {
                     holder.videoImage.setImageResource(android.R.color.black);
                     holder.playImage.setImageResource(android.R.drawable.ic_media_play);
