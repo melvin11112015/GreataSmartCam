@@ -31,7 +31,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     public static final String WIFI = "wifi";
     List<String> list;
     ArrayAdapter<String> adapter;
-    private AddFragment f0, f1, f2, f3;
+    private AddFragment f0, f2, f3;
     private FragmentManager fManager;
     private ImageView lightView;
     private ActionBar actionBar;
@@ -48,11 +48,10 @@ public class AddDeviceActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("根據提示新增攝像機 ");
         f0 = AddFragment.newInstance(R.layout.fragment_a);
-        f1 = AddFragment.newInstance(R.layout.fragment_one);
         f2 = AddFragment.newInstance(R.layout.fragment_two);
         f3 = AddFragment.newInstance(R.layout.fragment_three);
         fManager = getFragmentManager();
-        fManager.beginTransaction().add(R.id.frameFragment, f0).add(R.id.frameFragment, f1).add(R.id.frameFragment, f2).add(R.id.frameFragment, f3).commit();
+        fManager.beginTransaction().add(R.id.frameFragment, f0).add(R.id.frameFragment, f2).add(R.id.frameFragment, f3).commit();
 
 
         list = new ArrayList<String>();
@@ -78,30 +77,23 @@ public class AddDeviceActivity extends AppCompatActivity {
             animationDrawable.start();
         }
         if (sp == null) {
-            sp = f1.getView().findViewById(R.id.spinner);
+            sp = f2.getView().findViewById(R.id.spinner);
             sp.setAdapter(adapter);
         }
         if (editSSID == null) {
-            editSSID = f3.getView().findViewById(R.id.edit_ssid);
+            editSSID = f2.getView().findViewById(R.id.edit_ssid);
             (new WifiTask()).execute();
         }
-        fManager.beginTransaction().hide(f1).hide(f2).hide(f3).commit();
+        fManager.beginTransaction().hide(f2).hide(f3).commit();
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_next_0:
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f1).addToBackStack(null).commit();
-
-                break;
-            case R.id.button_next:
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f1).show(f2).addToBackStack(null).commit();
-
-
+                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f2).addToBackStack(null).commit();
                 break;
             case R.id.button_next_2:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).show(f3).addToBackStack(null).commit();
-
                 break;
         }
     }
@@ -138,7 +130,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 
                 for (int i = 0; i < wifiConfigurationList.size(); i++) {
                     Log.d(WIFI, "" + wifiConfigurationList.get(i).SSID);
-                    ssidList.add(wifiConfigurationList.get(i).SSID);
+                    ssidList.add(wifiConfigurationList.get(i).SSID.replaceAll("\"", ""));
                 }
                     Log.d(WIFI, "doInBackground: EDITSSID=NULL?");
                     Log.d(WIFI, "doInBackground: EDITSSID!=NULL");
@@ -161,25 +153,29 @@ public class AddDeviceActivity extends AppCompatActivity {
             Log.i(WIFI, "onPostExecute(Result result) called");
 
 
-            /*editSSID.setOnTouchListener(new View.OnTouchListener() {
+            editSSID.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
-                        listPopupWindow.setAdapter(new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_list_item_1, ssidList));
-                        listPopupWindow.setAnchorView(editSSID);
-                        listPopupWindow.setModal(true);
-                        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                editSSID.setText(ssidList.get(i));
-                            }
-                        });
-                        listPopupWindow.show();
+                        if (event.getX() >= (editSSID.getWidth() - editSSID
+                                .getCompoundDrawables()[2].getBounds().width())) {
+                            listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
+                            listPopupWindow.setAdapter(new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_list_item_1, ssidList));
+                            listPopupWindow.setAnchorView(editSSID);
+                            listPopupWindow.setModal(true);
+                            listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    editSSID.setText(ssidList.get(i));
+                                }
+                            });
+                            listPopupWindow.show();
+                            return true;
+                        }
                     }
                     return false;
                 }
-            });*/
+            });
         }
 
         //onCancelled方法用于在取消执行中的任务时更改UI
