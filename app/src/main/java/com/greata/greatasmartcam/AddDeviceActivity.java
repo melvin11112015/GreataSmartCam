@@ -12,12 +12,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ListPopupWindow;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -35,10 +39,11 @@ public class AddDeviceActivity extends AppCompatActivity {
     private FragmentManager fManager;
     private ImageView lightView;
     private ActionBar actionBar;
-    private EditText editSSID;
+    private EditText editSSID, editPwd;
     private List<String> ssidList;
     private Spinner sp;
     private ListPopupWindow listPopupWindow;
+    private CheckBox pwdCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,26 @@ public class AddDeviceActivity extends AppCompatActivity {
         if (editSSID == null) {
             editSSID = f2.getView().findViewById(R.id.edit_ssid);
             (new WifiTask()).execute();
+        }
+        if (editPwd == null) {
+            editPwd = f2.getView().findViewById(R.id.edit_pwd);
+        }
+        if (pwdCheckBox == null) {
+            pwdCheckBox = f2.getView().findViewById(R.id.show_pwd_checkbox);
+            pwdCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        //如果选中，显示密码
+                        editPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    } else {
+                        //否则隐藏密码
+                        editPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
+
+                }
+            });
         }
         fManager.beginTransaction().hide(f2).hide(f3).commit();
     }
@@ -156,17 +181,20 @@ public class AddDeviceActivity extends AppCompatActivity {
             editSSID.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    final int DRAWABLE_RIGHT = 2;
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (event.getX() >= (editSSID.getWidth() - editSSID
-                                .getCompoundDrawables()[2].getBounds().width())) {
+                                .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                             listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
                             listPopupWindow.setAdapter(new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_list_item_1, ssidList));
                             listPopupWindow.setAnchorView(editSSID);
+                            listPopupWindow.setHeight(500);
                             listPopupWindow.setModal(true);
                             listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     editSSID.setText(ssidList.get(i));
+                                    listPopupWindow.dismiss();
                                 }
                             });
                             listPopupWindow.show();
