@@ -108,6 +108,7 @@ public class RecordActivity extends AppCompatActivity {
             TextView stateTextView = rootView.findViewById(R.id.section_label);
             Button loginButton = rootView.findViewById(R.id.login_btn);
             ListView recList = rootView.findViewById(R.id.rec_list);
+            TextView storageText = rootView.findViewById(R.id.storage_text);
             List<Integer> recData = new ArrayList<Integer>();
             recData.add(0);
             recData.add(1);
@@ -118,6 +119,7 @@ public class RecordActivity extends AppCompatActivity {
                 if (getArguments().getBoolean("state")) {
                     content.setVisibility(View.VISIBLE);
                     stateTextView.setVisibility(View.INVISIBLE);
+                    storageText.setText("攝像機總存儲空間:7.47GB 已使用存儲空間:5.32GB");
                 } else {
                     content.setVisibility(View.INVISIBLE);
                     stateTextView.setVisibility(View.VISIBLE);
