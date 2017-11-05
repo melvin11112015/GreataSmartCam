@@ -169,4 +169,7 @@
     </string-array>
     <string name="title_activity_record">RecordActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="no_connection">未連接攝像機，不能訪問攝像機的存儲空間。</string>
+    <string name="no_google">錯誤:沒有檢測到 Google Play 服務</string>
+    <string name="greata_cloud">歡迎登陸Greata帳戶使用雲端存儲服務 </string>
 </resources>

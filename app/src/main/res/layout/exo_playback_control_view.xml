@@ -19,11 +19,11 @@
             android:layout_height="50dp"
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
-            android:background="@android:drawable/ic_menu_revert"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:scaleX="0.8"
-            android:scaleY="0.9"
-            android:tint="@color/colorAccent" />
+            android:background="@drawable/return_400pxpng"
+            android:backgroundTint="@android:color/background_light"
+            android:scaleType="fitXY"
+            android:scaleX="0.7"
+            android:scaleY="0.4" />
 
         <TextView
             android:id="@+id/player_title"
@@ -31,12 +31,13 @@
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:text="play"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/background_light"
             android:textSize="30sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -47,59 +48,46 @@
         android:paddingTop="5dp">
 
         <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/video_233px"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:scaleX="0.8"
-            android:scaleY="0.55"
-            android:tint="@color/colorAccent" />
-
-        <ImageButton
             android:id="@+id/imageButton6"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@drawable/photo_camera_909"
-            android:backgroundTint="@android:color/holo_orange_dark"
+            android:backgroundTint="@android:color/darker_gray"
             android:scaleX="0.9"
-            android:scaleY="0.7"
-            android:tint="@color/colorAccent" />
+            android:scaleY="0.7" />
 
-        <ImageButton
-            android:id="@+id/imageButton4"
+        <ToggleButton
+            android:id="@+id/rec_video_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/microphone_255"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:scaleX="0.65"
-            android:scaleY="0.9"
-            android:tint="@color/colorAccent" />
+            android:background="@drawable/toggle_recvideo"
+            android:scaleX="0.8"
+            android:scaleY="0.5"
+            android:textOff=""
+            android:textOn="" />
 
-        <ImageButton
-            android:id="@+id/imageButton"
+        <ToggleButton
+            android:id="@+id/sound_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/microphone_255"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:scaleX="0.65"
-            android:scaleY="0.9"
-            android:tint="@color/colorAccent" />
+            android:background="@drawable/toggle_sound"
+            android:scaleX="0.5"
+            android:scaleY="0.8"
+            android:textOff=""
+            android:textOn="" />
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/lockscreen_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/lockscreen"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:onClick="playerOnClick"
-            android:scaleX="0.8"
-            android:scaleY="0.8" />
+            android:background="@drawable/toggle_lockscreen"
+            android:textOff=""
+            android:textOn="" />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name=".RecordActivity"
-            android:label="@string/title_activity_record"
+            android:label="錄影記錄"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

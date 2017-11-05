@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 
 import android.widget.ImageButton;
@@ -44,6 +45,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.exoplayer2.C;
 
@@ -199,10 +201,10 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private LinearLayout debugRootView;
 
     private TextView debugTextView;
-    private TextView playerTitle;
+
+    private TextView playerTitle, recFrame;
 
     private Button retryButton;
-    private ImageButton lockScreenButton;
 
     private DataSource.Factory mediaDataSourceFactory;
 
@@ -234,6 +236,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private Uri loadedAdTagUri;
 
     private ViewGroup adOverlayViewGroup;
+
+    private ToggleButton lockScreenButton, recVideoButton;
+
     // Activity lifecycle
 
     private static boolean isBehindLiveWindow(ExoPlaybackException e) {
@@ -260,19 +265,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         return false;
 
-    }
-
-    public void playerOnClick(View view) {
-        switch (view.getId()) {
-            case R.id.lockscreen_btn:
-                Log.d("Test", "" + getRequestedOrientation());
-                if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LOCKED) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-                } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                }
-                break;
-        }
     }
 
     public void saveBitmap() {
@@ -330,9 +322,30 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         setContentView(R.layout.player_activity);
 
         lockScreenButton = findViewById(R.id.lockscreen_btn);
-        if (!isLandscape()) {
-            lockScreenButton.setVisibility(View.GONE);
-        }
+        lockScreenButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                }
+            }
+        });
+
+        recFrame = findViewById(R.id.rec_frame);
+        recVideoButton = findViewById(R.id.rec_video_btn);
+        recVideoButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    recFrame.setVisibility(View.VISIBLE);
+                } else {
+                    recFrame.setVisibility(View.INVISIBLE);
+                    showToast("錄影存儲到 ");
+                }
+            }
+        });
 
         View rootView = findViewById(R.id.root);
 
@@ -485,7 +498,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             getWindow().setAttributes(attrs);
             getWindow().addFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            lockScreenButton.setVisibility(View.VISIBLE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             Toast.makeText(this, "竖屏模式", Toast.LENGTH_SHORT).show();
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
@@ -493,7 +505,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             getWindow().setAttributes(attrs);
             getWindow().clearFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            lockScreenButton.setVisibility(View.GONE);
         }
         Log.d("Test", "rotate");
     }

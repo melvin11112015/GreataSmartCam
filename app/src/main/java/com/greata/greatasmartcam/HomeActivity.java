@@ -161,6 +161,7 @@ public class HomeActivity extends AppCompatActivity
         if (checkedPos < 0) return;
         Intent intent = new Intent();
         intent.putExtra("state", (boolean) mDatas.get(checkedPos).get("state"));
+        intent.putExtra("name", (String) mDatas.get(checkedPos).get("name"));
         intent.setClass(HomeActivity.this, RecordActivity.class);
         startActivity(intent);
     }
@@ -193,7 +194,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void googleReq(View v) {
-        Toast.makeText(this, "錯誤:沒有檢測到 Google Play 服務 ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.no_google, Toast.LENGTH_SHORT).show();
     }
 
     private void newMTask() {
@@ -293,7 +294,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mat3i", true, "鴻優視智慧攝像機1080P");
+            addItem(android.R.color.black, "mat3i", true, "鴻優視 1080P");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
