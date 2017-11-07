@@ -29,6 +29,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import android.widget.LinearLayout;
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity
     private static int checkedPos;
     //SimpleAdapter mAdapter;
     ListView playList;
-    LinearLayout myToolB;
+    GridLayout myToolB;
     SwipeRefreshLayout mRefreshLayout;
     Button noItemText;
     ImageView playImg;
@@ -107,7 +108,7 @@ public class HomeActivity extends AppCompatActivity
                     return false;
             }
         });*/
-        myToolB = (LinearLayout) findViewById(R.id.home_toolbar);
+        myToolB = (GridLayout) findViewById(R.id.home_toolbar);
         myToolB.setVisibility(View.INVISIBLE);
         checkedPos = playList.getCheckedItemPosition();
         playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
