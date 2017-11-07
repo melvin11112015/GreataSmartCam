@@ -15,6 +15,7 @@ import android.support.v7.widget.ListPopupWindow;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,19 +60,6 @@ public class AddDeviceActivity extends AppCompatActivity {
         fManager = getFragmentManager();
         fManager.beginTransaction().add(R.id.frameFragment, f0).add(R.id.frameFragment, f2).add(R.id.frameFragment, f3).commit();
 
-
-        list = new ArrayList<String>();
-
-        list.add("利优视Wifi");
-        list.add("利优视Wifi HD版");
-        list.add("利优云监控");
-        list.add("利优云监控 S");
-        list.add("利优云监控 2S");
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-
-
-
     }
 
     @Override
@@ -81,14 +70,12 @@ public class AddDeviceActivity extends AppCompatActivity {
             AnimationDrawable animationDrawable = (AnimationDrawable) lightView.getDrawable();
             animationDrawable.start();
         }
-        if (sp == null) {
+        if (sp == null || editSSID == null) {
             sp = f2.getView().findViewById(R.id.spinner);
-            sp.setAdapter(adapter);
-        }
-        if (editSSID == null) {
             editSSID = f2.getView().findViewById(R.id.edit_ssid);
             (new WifiTask()).execute();
         }
+
         if (editPwd == null) {
             editPwd = f2.getView().findViewById(R.id.edit_pwd);
         }
@@ -118,6 +105,12 @@ public class AddDeviceActivity extends AppCompatActivity {
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f2).addToBackStack(null).commit();
                 break;
             case R.id.button_next_2:
+                if (editSSID.getText().toString().equals("")) {
+                    Toast toast = Toast.makeText(AddDeviceActivity.this, "請輸入" + getResources().getString(R.string.ssid_connect_text), Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    return;
+                }
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).show(f3).addToBackStack(null).commit();
                 break;
         }
@@ -147,6 +140,16 @@ public class AddDeviceActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Log.i(WIFI, "doInBackground(Params... params) called");
             try {
+                list = new ArrayList<String>();
+
+                list.add("利优视Wifi");
+                list.add("利优视Wifi HD版");
+                list.add("利优云监控");
+                list.add("利优云监控 S");
+                list.add("利优云监控 2S");
+                adapter = new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_spinner_item, list);
+                adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
                 ssidList = new ArrayList<String>();
                 List<WifiConfiguration> wifiConfigurationList = wifiManager.getConfiguredNetworks();
@@ -177,6 +180,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.i(WIFI, "onPostExecute(Result result) called");
 
+            sp.setAdapter(adapter);
 
             editSSID.setOnTouchListener(new View.OnTouchListener() {
                 @Override

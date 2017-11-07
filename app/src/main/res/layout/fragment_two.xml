@@ -1,16 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".AddFragment">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:text="連接WiFi"
+        android:textColor="@android:color/black"
+        android:textSize="23sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".AddFragment">
@@ -18,8 +28,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="攝像機型號"
+            android:text="選擇攝像機型號"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
@@ -36,14 +45,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="与摄像机连接WiFi的SSID"
+            android:text="@string/ssid_connect_text"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
@@ -91,16 +99,15 @@
 
     <Button
         android:id="@+id/button_next_2"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="50dp"
-        android:layout_weight="1"
         android:background="@color/colorAccent"
         android:onClick="onClick"
+        android:padding="10dp"
         android:text="下一步"
         android:textColor="@android:color/white"
-        android:textSize="25sp"
+        android:textSize="23sp"
         android:textStyle="bold" />
 
 </LinearLayout>

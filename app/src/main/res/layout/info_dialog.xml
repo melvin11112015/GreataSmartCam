@@ -53,16 +53,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="《用戶使用條款及細則》 "
-        android:textColor="@android:color/black" />
+        android:text="《用戶使用條款及細則》 " />
 
     <TextView
         android:id="@+id/textView22"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="《私隱保護聲明 》 "
-        android:textColor="@android:color/black" />
+        android:text="《私隱保護聲明 》 " />
 
     <TextView
         android:id="@+id/textView17"
@@ -70,7 +68,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:text="@string/copyright" />
+        android:text="@string/copyright"
+        android:textColor="@android:color/black" />
 
     <Button
         android:id="@+id/mydialog_ok"

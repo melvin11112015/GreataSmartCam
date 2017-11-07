@@ -21,8 +21,8 @@
     <string name="dialog_contact">
         \ 電子郵箱:service@greata.com.tw \n
         官方網站:www.greata.com.tw \n
-        客服熱線: \n
-        公司地址: \n
+        客服熱線:886-2-2345-6969 \n
+        公司地址:臺北市信義路五段111號  \n
         Facebook:greata_international \n
         Twitter:greata_international  </string>
 
@@ -170,6 +170,7 @@
     <string name="title_activity_record">RecordActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="no_connection">未連接攝像機，不能訪問攝像機的存儲空間。</string>
+    <string name="ssid_connect_text">攝像機連接WiFi的SSID</string>
     <string name="no_google">錯誤:沒有檢測到 Google Play 服務</string>
     <string name="greata_cloud">歡迎登陸Greata帳戶使用雲端存儲服務 </string>
 </resources>

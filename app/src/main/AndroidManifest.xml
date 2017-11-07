@@ -20,7 +20,7 @@
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlayerActivity"
             android:configChanges="orientation|screenSize" />
@@ -47,7 +47,12 @@
         <activity
             android:name=".RecordActivity"
             android:label="錄影記錄"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver
+            android:name=".WifiReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>
