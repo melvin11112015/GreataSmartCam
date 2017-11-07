@@ -14,7 +14,7 @@
         android:paddingTop="5dp">
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/back_play"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="15dp"
@@ -48,7 +48,7 @@
         android:paddingTop="5dp">
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/screenshot_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
@@ -69,22 +69,23 @@
             android:textOn="" />
 
         <ToggleButton
-            android:id="@+id/sound_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/toggle_sound"
-            android:scaleX="0.5"
-            android:scaleY="0.8"
-            android:textOff=""
-            android:textOn="" />
-
-        <ToggleButton
             android:id="@+id/lockscreen_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@drawable/toggle_lockscreen"
+            android:textOff=""
+            android:textOn="" />
+
+        <ToggleButton
+            android:id="@+id/sound_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/toggle_sound"
+            android:checked="true"
+            android:scaleX="0.5"
+            android:scaleY="0.8"
             android:textOff=""
             android:textOn="" />
 

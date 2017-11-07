@@ -3,11 +3,6 @@
 
     <group>
         <item
-            android:id="@+id/nav_camera"
-            android:checked="true"
-            android:icon="@drawable/web_cam2_128px"
-            android:title="Web Cam" />
-        <item
             android:id="@+id/nav_gallery"
             android:checked="true"
             android:icon="@drawable/add_744pxpng"

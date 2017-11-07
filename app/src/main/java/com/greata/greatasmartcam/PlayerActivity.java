@@ -362,6 +362,34 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         playerTitle = findViewById(R.id.player_title);
         playerTitle.setText(getIntent().getCharSequenceExtra("title"));
 
+        ImageButton backBtn = findViewById(R.id.back_play);
+        backBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlayerActivity.this.finish();
+            }
+        });
+
+        ImageButton screenShotBtn = findViewById(R.id.screenshot_btn);
+        screenShotBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("截圖保存到 ");
+            }
+        });
+
+        ToggleButton soundBtn = findViewById(R.id.sound_btn);
+        soundBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    player.setVolume(1.0f);
+                } else {
+                    player.setVolume(0);
+                }
+            }
+        });
+
         simpleExoPlayerView = findViewById(R.id.player_view);
         simpleExoPlayerView.hideController();
 

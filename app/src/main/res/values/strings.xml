@@ -173,4 +173,5 @@
     <string name="ssid_connect_text">攝像機連接WiFi的SSID</string>
     <string name="no_google">錯誤:沒有檢測到 Google Play 服務</string>
     <string name="greata_cloud">歡迎登陸Greata帳戶使用雲端存儲服務 </string>
+    <string name="no_network">無法連結攝像機，請檢查網路和攝像機設定</string>
 </resources>

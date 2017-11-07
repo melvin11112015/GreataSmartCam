@@ -157,13 +157,20 @@ public class HomeActivity extends AppCompatActivity
         HomeActivity.this.myToolB.setVisibility(View.INVISIBLE);
     }
 
+    public void playBtnOnClick(View v) {
+        showPlay();
+    }
     public void recBtnOnClick(View v) {
-        if (checkedPos < 0) return;
-        Intent intent = new Intent();
-        intent.putExtra("state", (boolean) mDatas.get(checkedPos).get("state"));
-        intent.putExtra("name", (String) mDatas.get(checkedPos).get("name"));
-        intent.setClass(HomeActivity.this, RecordActivity.class);
-        startActivity(intent);
+        if (NetWorkUtils.isNetworkConnected(this)) {
+            if (checkedPos < 0) return;
+            Intent intent = new Intent();
+            intent.putExtra("state", (boolean) mDatas.get(checkedPos).get("state"));
+            intent.putExtra("name", (String) mDatas.get(checkedPos).get("name"));
+            intent.setClass(HomeActivity.this, RecordActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void delBtnOnClick(View v) {
@@ -213,7 +220,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void showPlay() {
-        if (NetWorkUtils.isNetworkConnected(this)) {
+        if (NetWorkUtils.isNetworkConnected(this) && (boolean) mDatas.get(checkedPos).get("state")) {
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
             mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
@@ -221,7 +228,7 @@ public class HomeActivity extends AppCompatActivity
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);
         } else {
-            Toast.makeText(this, "無法連結網路，請檢查網路設定", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -288,13 +295,10 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            showPlay();
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "mat3i", true, "鴻優視 1080P");
+            addItem(android.R.color.black, "mat5i", false, "鴻優視 720P");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
@@ -412,7 +416,7 @@ public class HomeActivity extends AppCompatActivity
             if (data != null) {
                 holder.idTextView.setText((String) data.get("name"));
                 holder.modelTextView.setText((String) data.get("model"));
-                if ((boolean) data.get("state")) {
+                if (NetWorkUtils.isNetworkConnected(HomeActivity.this) && (boolean) data.get("state")) {
                     holder.videoImage.setImageResource(android.R.color.black);
                     holder.playImage.setImageResource(android.R.drawable.ic_media_play);
                     holder.stateTextView.setText("線上");
