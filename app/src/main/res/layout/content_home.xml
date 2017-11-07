@@ -52,85 +52,74 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <LinearLayout
+
+    <GridLayout
         android:id="@+id/home_toolbar"
-        android:layout_width="match_parent"
+        android:background="@drawable/side_nav_bar_reverse"
+            android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:orientation="vertical">
+        android:columnCount="4"
+        android:rowCount="2">
 
-        <LinearLayout
-            style="@style/Widget.AppCompat.ButtonBar"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-
-            android:background="@drawable/side_nav_bar_reverse">
-
-            <Button
+        <ImageButton
                 android:id="@+id/play_btn"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="90dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="0"
                 android:background="@drawable/play_378px"
                 android:backgroundTint="@android:color/white"
                 android:onClick="playBtnOnClick"
-                android:scaleX="0.35"
-                android:scaleY="0.85" />
+            android:scaleType="matrix" />
 
-            <Button
+        <ImageButton
                 android:id="@+id/button3"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="90dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_row="0"
                 android:background="@drawable/data_storage_595px"
                 android:backgroundTint="@android:color/white"
-                android:onClick="recBtnOnClick"
-                android:scaleX="0.35"
-                android:scaleY="0.8"
-                android:text="Button" />
+            android:onClick="recBtnOnClick" />
 
-            <Button
+        <ImageButton
                 android:id="@+id/button2"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="90dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:layout_row="0"
                 android:background="@drawable/ic_menu_manage"
                 android:backgroundTint="@android:color/white"
-                android:scaleX="0.33"
-                android:scaleY="0.75" />
+            android:scaleType="fitXY" />
 
-            <Button
+        <ImageButton
                 android:id="@+id/delete_btn"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="90dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_column="3"
+            android:layout_gravity="center"
+            android:layout_row="0"
                 android:background="@drawable/trashbin"
                 android:backgroundTint="@android:color/white"
-                android:gravity="bottom"
                 android:onClick="delBtnOnClick"
-                android:scaleX="0.55"
-                android:scaleY="0.8" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal">
+            android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/play_tv"
                 android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_row="1"
                 android:gravity="center_horizontal"
                 android:onClick="playBtnOnClick"
                 android:text="觀看"
@@ -140,9 +129,10 @@
 
             <TextView
                 android:id="@+id/textView11"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_row="1"
                 android:gravity="center_horizontal"
                 android:onClick="recBtnOnClick"
                 android:text="記錄"
@@ -152,9 +142,10 @@
 
             <TextView
                 android:id="@+id/textView10"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_row="1"
                 android:gravity="center_horizontal"
                 android:text="調整"
                 android:textColor="@android:color/white"
@@ -163,17 +154,18 @@
 
             <TextView
                 android:id="@+id/delTxt"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_row="1"
                 android:gravity="center_horizontal"
                 android:onClick="delBtnOnClick"
                 android:text="移除"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
+
+    </GridLayout>
 
 
 </RelativeLayout>
