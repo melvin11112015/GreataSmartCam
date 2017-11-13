@@ -66,7 +66,7 @@ public class RecordActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        Toast.makeText(this, R.string.no_google, Toast.LENGTH_SHORT).show();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -132,7 +132,7 @@ public class RecordActivity extends AppCompatActivity {
                 stateTextView.setText(R.string.greata_cloud);
                 stateTextView.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(getActivity(), R.string.no_google, Toast.LENGTH_SHORT).show();
+
 
             // new Date()为获取当前系统时间
 

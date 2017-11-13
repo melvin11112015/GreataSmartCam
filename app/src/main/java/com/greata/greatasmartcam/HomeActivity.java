@@ -3,11 +3,11 @@ package com.greata.greatasmartcam;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import android.support.v7.app.AlertDialog;
@@ -32,9 +32,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -224,7 +222,8 @@ public class HomeActivity extends AppCompatActivity
         if (NetWorkUtils.isNetworkConnected(this) && (boolean) mDatas.get(checkedPos).get("state")) {
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-            mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
             mIntent.putExtra("title", "this is title");
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);

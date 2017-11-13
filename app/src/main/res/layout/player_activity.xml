@@ -52,6 +52,13 @@
         app:controller_layout_id="@layout/exo_playback_control_view" />
 
 
+    <TextClock
+        android:id="@+id/textClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format24Hour="yyyy-MM-dd hh:mm:ss"
+        android:textColor="@android:color/white" />
+
     <TextView
         android:id="@+id/rec_frame"
         android:layout_width="match_parent"

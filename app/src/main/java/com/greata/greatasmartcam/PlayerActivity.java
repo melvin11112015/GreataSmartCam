@@ -12,8 +12,10 @@ import android.content.pm.PackageManager;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -42,6 +44,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import android.widget.ProgressBar;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import android.widget.Toast;
@@ -358,7 +361,11 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         retryButton = findViewById(R.id.retry_button);
 
         retryButton.setOnClickListener(this);
-
+        TextClock mTextClock = findViewById(R.id.textClock);
+        if (Util.SDK_INT >= 17) {
+            mTextClock.setFormat24Hour("yyyy-MM-dd hh:mm:ss");
+        }
+        mTextClock.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
         playerTitle = findViewById(R.id.player_title);
         playerTitle.setText(getIntent().getCharSequenceExtra("title"));
 
