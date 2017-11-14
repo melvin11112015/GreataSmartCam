@@ -62,6 +62,7 @@
         android:layout_alignParentStart="true"
         android:background="@drawable/side_nav_bar_reverse"
         android:columnCount="4"
+        android:paddingTop="5dp"
         android:rowCount="2">
 
         <ImageButton

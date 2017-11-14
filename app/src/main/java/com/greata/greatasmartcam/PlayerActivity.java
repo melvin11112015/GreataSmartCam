@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 
@@ -23,8 +24,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -183,6 +187,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     private static final CookieManager DEFAULT_COOKIE_MANAGER;
+    public static final int L_SIZE = 22;
 
     static {
 
@@ -223,6 +228,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private TrackGroupArray lastSeenTrackGroupArray;
 
+    private TextClock mTextClock;
+
 
     private boolean shouldAutoPlay;
 
@@ -241,6 +248,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private ViewGroup adOverlayViewGroup;
 
     private ToggleButton lockScreenButton, recVideoButton;
+
+    private FrameLayout.LayoutParams pParams, lParams;
 
     // Activity lifecycle
 
@@ -361,11 +370,20 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         retryButton = findViewById(R.id.retry_button);
 
         retryButton.setOnClickListener(this);
-        TextClock mTextClock = findViewById(R.id.textClock);
-        if (Util.SDK_INT >= 17) {
-            mTextClock.setFormat24Hour("yyyy-MM-dd hh:mm:ss");
-        }
+        mTextClock = findViewById(R.id.textClock);
         mTextClock.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
+        String htmlStr = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:mm:ss";
+        mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+        mTextClock.setAlpha(0.5f);
+        mTextClock.setVisibility(View.INVISIBLE);
+        pParams = (FrameLayout.LayoutParams) mTextClock.getLayoutParams();
+        lParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        lParams.setMargins(0, 32, 113, 0);
+        mTextClock.setTextSize(14);
+        if (isLandscape()) {
+            mTextClock.setLayoutParams(lParams);
+            mTextClock.setTextSize(L_SIZE);
+        }
         playerTitle = findViewById(R.id.player_title);
         playerTitle.setText(getIntent().getCharSequenceExtra("title"));
 
@@ -404,11 +422,13 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         mProgressBar.setVisibility(View.INVISIBLE);
 
         simpleExoPlayerView.setControllerVisibilityListener(this);
-
         simpleExoPlayerView.requestFocus();
-        showNormalDialog();
+        if (NetWorkUtils.isWifiConnected(this)) {
+            shouldAutoPlay = true;
 
-
+        } else {
+            showNormalDialog();
+        }
     }
 
     private void showNormalDialog() {
@@ -424,7 +444,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 shouldAutoPlay = true;
-                player.setPlayWhenReady(shouldAutoPlay);
                 if(!player.isLoading()){
                     // TODO: 2017/10/25 not start to play before on click
                 }
@@ -446,7 +465,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         releasePlayer();
 
-        shouldAutoPlay = true;
 
         clearResumePosition();
 
@@ -527,19 +545,23 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "横屏模式", Toast.LENGTH_SHORT).show();
+
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
             getWindow().setAttributes(attrs);
             getWindow().addFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            mTextClock.setLayoutParams(lParams);
+            mTextClock.setTextSize(L_SIZE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "竖屏模式", Toast.LENGTH_SHORT).show();
+
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
             getWindow().clearFlags(
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            mTextClock.setLayoutParams(pParams);
+            mTextClock.setTextSize(14);
         }
         Log.d("Test", "rotate");
     }
@@ -1058,8 +1080,10 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         // Do nothing.
         if (isLoading) {
             mProgressBar.setVisibility(View.VISIBLE);
+
         } else {
             mProgressBar.setVisibility(View.INVISIBLE);
+            mTextClock.setVisibility(View.VISIBLE);
         }
 
     }

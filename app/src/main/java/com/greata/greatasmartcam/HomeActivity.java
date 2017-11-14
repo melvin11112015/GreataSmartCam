@@ -130,8 +130,7 @@ public class HomeActivity extends AppCompatActivity
                                             }
                                         }
 
-        )
-        ;
+        );
 
         newMTask();
 
@@ -157,7 +156,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void playBtnOnClick(View v) {
-        showPlay();
+        showPlay(checkedPos);
     }
     public void recBtnOnClick(View v) {
         if (NetWorkUtils.isNetworkConnected(this)) {
@@ -218,8 +217,8 @@ public class HomeActivity extends AppCompatActivity
         Log.d(TAG, "itemsCheck: " + mDatas.toString());
     }
 
-    private void showPlay() {
-        if (NetWorkUtils.isNetworkConnected(this) && (boolean) mDatas.get(checkedPos).get("state")) {
+    private void showPlay(int pos) {
+        if (NetWorkUtils.isNetworkConnected(this) && (boolean) mDatas.get(pos).get("state")) {
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
             //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
@@ -395,7 +394,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = LayoutInflater.from(context);
             ViewHolder holder = null;
             if (convertView == null) {
@@ -414,6 +413,12 @@ public class HomeActivity extends AppCompatActivity
             }
             Map<String, Object> data = dataList.get(position);
             if (data != null) {
+                holder.videoImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPlay(position);
+                    }
+                });
                 holder.idTextView.setText((String) data.get("name"));
                 holder.modelTextView.setText((String) data.get("model"));
                 if (NetWorkUtils.isNetworkConnected(HomeActivity.this) && (boolean) data.get("state")) {
@@ -422,7 +427,7 @@ public class HomeActivity extends AppCompatActivity
                     holder.stateTextView.setText("線上");
                     holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
                 } else {
-                    holder.videoImage.setImageResource(android.R.color.darker_gray);
+                    holder.videoImage.setImageResource(android.R.color.black);
                     holder.playImage.setImageResource(R.drawable.power_shutdown);
                     holder.stateTextView.setText("離線");
                     holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
