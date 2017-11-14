@@ -845,10 +845,12 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             player.seekTo(resumeWindow, resumePosition);
 
         }
+        player.setRepeatMode(Player.REPEAT_MODE_ALL);
 
         player.prepare(mediaSource, !haveResumePosition, false);
 
         inErrorState = false;
+
 
         updateButtonVisibilities();
 
@@ -1079,11 +1081,11 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         // Do nothing.
         if (isLoading) {
-            mProgressBar.setVisibility(View.VISIBLE);
+
 
         } else {
-            mProgressBar.setVisibility(View.INVISIBLE);
-            mTextClock.setVisibility(View.VISIBLE);
+
+
         }
 
     }
@@ -1092,13 +1094,26 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-        if (playbackState == Player.STATE_ENDED) {
-
-            showControls();
-
+        switch (playbackState) {
+            case Player.STATE_BUFFERING:
+                mProgressBar.setVisibility(View.VISIBLE);
+                mTextClock.setVisibility(View.INVISIBLE);
+                break;
+            case Player.STATE_ENDED:
+                //showControls();
+                break;
+            case Player.STATE_IDLE:
+                break;
+            case Player.STATE_READY:
+                mProgressBar.setVisibility(View.INVISIBLE);
+                mTextClock.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
         }
 
-        updateButtonVisibilities();
+
+        //updateButtonVisibilities();
 
     }
 
