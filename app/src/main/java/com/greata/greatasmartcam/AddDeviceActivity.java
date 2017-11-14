@@ -142,11 +142,12 @@ public class AddDeviceActivity extends AppCompatActivity {
             try {
                 list = new ArrayList<String>();
 
-                list.add("利优视Wifi");
-                list.add("利优视Wifi HD版");
-                list.add("利优云监控");
-                list.add("利优云监控 S");
-                list.add("利优云监控 2S");
+                list.add("鴻優視 720P");
+                list.add("鴻優視 1080P");
+                list.add("鴻優視 2S 720P");
+                list.add("鴻優視 2S 1080P");
+                list.add("鴻優視 Cloud 720P");
+                list.add("鴻優視 Cloud 1080P");
                 adapter = new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_spinner_item, list);
                 adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
 

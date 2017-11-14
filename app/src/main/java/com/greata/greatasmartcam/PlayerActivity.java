@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
@@ -14,8 +15,10 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -148,6 +151,9 @@ import java.net.CookieManager;
 
 import java.net.CookiePolicy;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -182,12 +188,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     public static final String EXTENSION_LIST_EXTRA = "extension_list";
 
     public static final String AD_TAG_URI_EXTRA = "ad_tag_uri";
-
-
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-
-    private static final CookieManager DEFAULT_COOKIE_MANAGER;
     public static final int L_SIZE = 22;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private static final CookieManager DEFAULT_COOKIE_MANAGER;
 
     static {
 
@@ -237,6 +240,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private long resumePosition;
 
+    private WifiReceiver mWifiReceiver;
+
 
     // Fields used only for ad playback. The ads loader is loaded via reflection.
 
@@ -251,6 +256,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private FrameLayout.LayoutParams pParams, lParams;
 
+    private String htmlStr = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:mm:ss";
+    private String htmlStr2 = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:";
+    private SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
     // Activity lifecycle
 
     private static boolean isBehindLiveWindow(ExoPlaybackException e) {
@@ -370,12 +378,22 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         retryButton = findViewById(R.id.retry_button);
 
         retryButton.setOnClickListener(this);
+/*
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        mWifiReceiver = new WifiReceiver();
+        registerReceiver(mWifiReceiver, filter);
+*/
         mTextClock = findViewById(R.id.textClock);
         mTextClock.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
-        String htmlStr = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:mm:ss";
-        mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+
+
+        mTextClock.setFormat24Hour(Html.fromHtml(htmlStr2) + sdf.format(new Date()));
         mTextClock.setAlpha(0.5f);
         mTextClock.setVisibility(View.INVISIBLE);
+
         pParams = (FrameLayout.LayoutParams) mTextClock.getLayoutParams();
         lParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         lParams.setMargins(0, 32, 113, 0);
@@ -384,6 +402,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             mTextClock.setLayoutParams(lParams);
             mTextClock.setTextSize(L_SIZE);
         }
+
         playerTitle = findViewById(R.id.player_title);
         playerTitle.setText(getIntent().getCharSequenceExtra("title"));
 
@@ -420,12 +439,12 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         mProgressBar = findViewById(R.id.progressBar_play);
         mProgressBar.setVisibility(View.INVISIBLE);
-
+        mTextClock.setFreezesText(true);
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
         if (NetWorkUtils.isWifiConnected(this)) {
             shouldAutoPlay = true;
-
+            mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
         } else {
             showNormalDialog();
         }
@@ -439,17 +458,16 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
          */
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(PlayerActivity.this);
-        normalDialog.setMessage("你的网络不是wifi，是否继续");
-        normalDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        normalDialog.setCancelable(false);
+        normalDialog.setMessage(R.string.network_tips);
+        normalDialog.setPositiveButton("繼續", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 shouldAutoPlay = true;
-                if(!player.isLoading()){
-                    // TODO: 2017/10/25 not start to play before on click
-                }
+                mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
             }
         });
-        normalDialog.setNegativeButton("关闭", new DialogInterface.OnClickListener() {
+        normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 PlayerActivity.this.finish();
@@ -462,13 +480,23 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     @Override
 
     public void onNewIntent(Intent intent) {
-
+        if (intent.getAction().equals("realNetworkChanged")) {
+            if (intent.getBooleanExtra("realNetwork", true)) {
+                Log.d("network", "onNewIntent:true ");
+                player.setRepeatMode(Player.REPEAT_MODE_ONE);
+                player.setPlayWhenReady(shouldAutoPlay);
+            } else {
+                player.setRepeatMode(Player.REPEAT_MODE_ALL);
+                player.setPlayWhenReady(false);
+            }
+            return;
+        }
         releasePlayer();
-
 
         clearResumePosition();
 
         setIntent(intent);
+
 
     }
 
@@ -536,6 +564,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         releaseAdsLoader();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
+        //unregisterReceiver(mWifiReceiver);
 
     }
 
@@ -1100,7 +1130,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                 mTextClock.setVisibility(View.INVISIBLE);
                 break;
             case Player.STATE_ENDED:
-                //showControls();
+                mProgressBar.setVisibility(View.VISIBLE);
                 break;
             case Player.STATE_IDLE:
                 break;

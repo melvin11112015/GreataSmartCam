@@ -13,9 +13,9 @@ public class WifiReceiver extends BroadcastReceiver {
     private String getConnectionType(int type) {
         String connType = "";
         if (type == ConnectivityManager.TYPE_MOBILE) {
-            connType = "3G网络数据";
+            connType = "3G";
         } else if (type == ConnectivityManager.TYPE_WIFI) {
-            connType = "WIFI网络";
+            connType = "WIFI";
         }
         return connType;
     }
@@ -50,6 +50,8 @@ public class WifiReceiver extends BroadcastReceiver {
                 }
             }
         }
+        Intent playCheckIntent = new Intent(context, PlayerActivity.class);
+        playCheckIntent.setAction("realNetworkChanged");
         // 监听网络连接，包括wifi和移动数据的打开和关闭,以及连接上可用的连接都会接到监听
         if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
             //获取联网状态的NetworkInfo对象
@@ -61,12 +63,17 @@ public class WifiReceiver extends BroadcastReceiver {
                     if (info.getType() == ConnectivityManager.TYPE_WIFI
                             || info.getType() == ConnectivityManager.TYPE_MOBILE) {
                         Log.i("TAG", getConnectionType(info.getType()) + "连上");
+                        playCheckIntent.putExtra("realNetwork", true);
+                        context.startActivity(playCheckIntent);
                     }
                 } else {
                     Log.i("TAG", getConnectionType(info.getType()) + "断开");
+                    playCheckIntent.putExtra("realNetwork", false);
+                    context.startActivity(playCheckIntent);
                 }
             }
         }
+        playCheckIntent = null;
     }
 }
 

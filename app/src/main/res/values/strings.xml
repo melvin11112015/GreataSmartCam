@@ -174,4 +174,5 @@
     <string name="no_google">錯誤:沒有檢測到 Google Play 服務</string>
     <string name="greata_cloud">歡迎登陸Greata帳戶使用雲端存儲服務 </string>
     <string name="no_network">無法連結攝像機，請檢查網路和攝像機設定</string>
+    <string name="network_tips">正在使用流動數據流量，可能導致電訊運營商收取額外費用。是否確定繼續觀看？</string>
 </resources>

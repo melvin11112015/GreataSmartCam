@@ -38,7 +38,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="12dp"
-        android:onClick="videoimgOnClick"
         app:srcCompat="@android:color/background_dark" />
 
     <ImageView
