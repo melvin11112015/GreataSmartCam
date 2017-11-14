@@ -52,8 +52,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@drawable/photo_camera_909"
-            android:backgroundTint="@android:color/darker_gray"
+            android:background="@drawable/selector_photo"
             android:scaleX="0.9"
             android:scaleY="0.7" />
 
