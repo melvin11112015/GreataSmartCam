@@ -4,6 +4,7 @@ package com.greata.greatasmartcam;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -31,11 +32,17 @@ public class DevSettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-
+            if (preference instanceof EditTextPreference) {
+                EditTextPreference editTextPref = (EditTextPreference) preference;
+                if (editTextPref.getTitle().toString().contains("password")) {
+                    editTextPref.setSummary("******");
+                } else {
+                    editTextPref.setSummary("321312312");
+                }
+            }
 
             // For all other preferences, set the summary to the value's
             // simple string representation.
-            preference.setSummary(stringValue);
 
             return true;
         }

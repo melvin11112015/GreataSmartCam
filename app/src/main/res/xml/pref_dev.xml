@@ -3,7 +3,8 @@
     <EditTextPreference
         android:defaultValue="true"
         android:key="example2_text"
-        android:title="@string/pref_title_social_recommendations" />
+        android:summary="asasa"
+        android:title="password" />
 
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
