@@ -6,23 +6,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.os.Environment;
-import android.support.v4.widget.SwipeRefreshLayout;
-
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
@@ -31,15 +28,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -171,6 +165,21 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    public void devBtnOnClick(View v) {
+        if (checkedPos < 0) return;
+        Intent devIntent = new Intent(HomeActivity.this, DevSettingsActivity.class);
+        devIntent.putExtra("devNo", checkedPos);
+        startActivityForResult(devIntent, 999);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 999) {
+            newMTask();
+        }
+    }
+
     public void delBtnOnClick(View v) {
         if (checkedPos < 0) return;
         /* @setIcon 设置对话框图标
@@ -297,7 +306,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "我的攝像機1 ", true, "鴻優視 2S 1080P");
+            addItem(android.R.color.black, "我的攝像機1 ", true, "鴻優視 2S 720P");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
@@ -347,11 +356,6 @@ public class HomeActivity extends AppCompatActivity
         mMap.put("model", model);
         mDatas.add(mMap);
         mListDataSave.setDataList(DEVICE_TAG, mDatas);
-    }
-
-    public void videoimgOnClick(View view) {
-        Toast.makeText(HomeActivity.this, "toast video", Toast.LENGTH_SHORT).show();
-        // TODO: 2017/10/13 use listener
     }
 
     static class ViewHolder {
