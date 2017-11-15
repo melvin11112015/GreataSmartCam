@@ -122,7 +122,7 @@ public class DevSettingsActivity extends AppCompatPreferenceActivity {
 
             bindPreferenceSummaryToValue(mEditPref);
             bindPreferenceSummaryToValue(findPreference("example2_list"));
-// TODO: 2017/11/15 change summary 
+// TODO: 2017/11/15 change summary
             mEditPref.setSummary("6666666");
         }
     }

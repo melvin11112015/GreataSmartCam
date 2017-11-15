@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity
 
         );
 
-        newMTask();
+
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.layout_swipe_refresh);
         mRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -243,6 +243,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        newMTask();
     }
 
     @Override
@@ -426,7 +427,7 @@ public class HomeActivity extends AppCompatActivity
                 holder.idTextView.setText((String) data.get("name"));
                 holder.modelTextView.setText((String) data.get("model"));
                 if (NetWorkUtils.isNetworkConnected(HomeActivity.this) && (boolean) data.get("state")) {
-                    holder.videoImage.setImageResource(android.R.color.black);
+                    holder.videoImage.setImageResource(R.drawable.vid_pic);
                     holder.playImage.setImageResource(android.R.drawable.ic_media_play);
                     holder.stateTextView.setText("線上");
                     holder.stateTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
