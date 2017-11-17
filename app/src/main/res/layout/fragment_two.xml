@@ -26,6 +26,7 @@
         tools:context=".AddFragment">
 
         <TextView
+            android:id="@+id/f2_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="選擇攝像機型號"
@@ -49,6 +50,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/f2_wifi_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ssid_connect_text"
@@ -59,7 +61,6 @@
             android:id="@+id/edit_ssid"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:drawableRight="@android:drawable/ic_menu_add"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="" />
@@ -74,7 +75,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/f2_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="WiFi密碼"

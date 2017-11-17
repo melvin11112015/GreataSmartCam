@@ -1,16 +1,16 @@
 package com.greata.greatasmartcam;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     private ImageView lightView;
     private ActionBar actionBar;
     private EditText editSSID, editPwd;
+    private TextView f2WifiTv, f2PwdTv, f2ModelTv;
     private List<String> ssidList;
     private Spinner sp;
     private ListPopupWindow listPopupWindow;
@@ -73,11 +75,34 @@ public class AddDeviceActivity extends AppCompatActivity {
         if (sp == null || editSSID == null) {
             sp = f2.getView().findViewById(R.id.spinner);
             editSSID = f2.getView().findViewById(R.id.edit_ssid);
+            Drawable dwRight4 = getResources().getDrawable(R.drawable.add_744pxpng);
+            dwRight4.setBounds(0, 0, 40, 40);
+            Drawable dwLeftC4 = DrawableCompat.wrap(dwRight4);
+            DrawableCompat.setTint(dwLeftC4, getResources().getColor(android.R.color.darker_gray));
+            editSSID.setCompoundDrawables(null, null, dwLeftC4, null);
             (new WifiTask()).execute();
         }
 
         if (editPwd == null) {
             editPwd = f2.getView().findViewById(R.id.edit_pwd);
+            f2WifiTv = f2.getView().findViewById(R.id.f2_wifi_tv);
+            Drawable dwLeft = getResources().getDrawable(R.drawable.wifi_164);
+            dwLeft.setBounds(0, 0, 40, 30);
+            Drawable dwLeftC = DrawableCompat.wrap(dwLeft);
+            DrawableCompat.setTint(dwLeftC, getResources().getColor(R.color.colorPrimary));
+            f2WifiTv.setCompoundDrawables(dwLeftC, null, null, null);
+            f2PwdTv = f2.getView().findViewById(R.id.f2_pwd);
+            Drawable dwLeft2 = getResources().getDrawable(R.drawable.key_lock);
+            dwLeft2.setBounds(0, 0, 40, 40);
+            Drawable dwLeftC2 = DrawableCompat.wrap(dwLeft2);
+            DrawableCompat.setTint(dwLeftC2, getResources().getColor(R.color.colorPrimary));
+            f2PwdTv.setCompoundDrawables(dwLeftC2, null, null, null);
+            f2ModelTv = f2.getView().findViewById(R.id.f2_model);
+            Drawable dwLeft3 = getResources().getDrawable(R.drawable.web_cam2_128px);
+            dwLeft3.setBounds(0, 0, 40, 40);
+            Drawable dwLeftC3 = DrawableCompat.wrap(dwLeft3);
+            DrawableCompat.setTint(dwLeftC3, getResources().getColor(R.color.colorPrimary));
+            f2ModelTv.setCompoundDrawables(dwLeftC3, null, null, null);
         }
         if (pwdCheckBox == null) {
             pwdCheckBox = f2.getView().findViewById(R.id.show_pwd_checkbox);

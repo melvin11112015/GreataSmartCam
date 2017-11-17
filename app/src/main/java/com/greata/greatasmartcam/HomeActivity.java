@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static final String DEVICE_TAG = "device_tag";
+
     private static final String TAG = "ASYNC_TASK";
     private static int checkedPos;
     //SimpleAdapter mAdapter;
@@ -168,7 +168,7 @@ public class HomeActivity extends AppCompatActivity
     public void devBtnOnClick(View v) {
         if (checkedPos < 0) return;
         Intent devIntent = new Intent(HomeActivity.this, DevSettingsActivity.class);
-        devIntent.putExtra("devNo", checkedPos);
+        devIntent.putExtra("pos", checkedPos);
         startActivityForResult(devIntent, 999);
     }
 
@@ -195,7 +195,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 mDatas.remove(checkedPos);
-                mListDataSave.setDataList(DEVICE_TAG, mDatas);
+                mListDataSave.setDataList(ListDataSave.DEVICE_TAG, mDatas);
                 mAdapter.notifyDataSetChanged();
                 hideToolbar(checkedPos);
 
@@ -356,7 +356,7 @@ public class HomeActivity extends AppCompatActivity
         mMap.put("state", state);
         mMap.put("model", model);
         mDatas.add(mMap);
-        mListDataSave.setDataList(DEVICE_TAG, mDatas);
+        mListDataSave.setDataList(ListDataSave.DEVICE_TAG, mDatas);
     }
 
     static class ViewHolder {
@@ -465,7 +465,7 @@ public class HomeActivity extends AppCompatActivity
             Log.i(TAG, "doInBackground(Params... params) called");
             try {
                 Thread.sleep(1000);
-                List<Map<String, Object>> tempList = mListDataSave.getDataList(DEVICE_TAG);
+                List<Map<String, Object>> tempList = mListDataSave.getDataList(ListDataSave.DEVICE_TAG);
                 mDatas.clear();
                 mDatas.addAll(tempList);
             } catch (Exception e) {

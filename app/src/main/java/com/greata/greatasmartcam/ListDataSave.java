@@ -13,6 +13,7 @@ import java.util.List;
  * Created by XianBo.Geng on 2017/1/18.
  */
 public class ListDataSave {
+    public static final String DEVICE_TAG = "device_tag";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
