@@ -232,7 +232,7 @@ public class HomeActivity extends AppCompatActivity
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
             //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
             mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
-            mIntent.putExtra("title", "this is title");
+            mIntent.putExtra("title", (String) mDatas.get(pos).get("name"));
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);
         } else {
@@ -307,7 +307,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "我的攝像機1 ", true, "鴻優視 2S 720P");
+            addItem(android.R.color.black, "我的攝像機2 ", false, "鴻優視 1080P");
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
