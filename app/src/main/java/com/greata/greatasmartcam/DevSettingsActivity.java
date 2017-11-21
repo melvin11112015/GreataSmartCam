@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class DevSettingsActivity extends AppCompatActivity {
     private List<Map<String, Object>> mDatas;
     private Map<String, Object> myData;
     private ActionBar actionBar;
+    private RadioGroup sexGroup;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class DevSettingsActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("pos", -1);
         mListDataSave = new ListDataSave(this, "devices");
         mDatas = mListDataSave.getDataList(ListDataSave.DEVICE_TAG);
+        sexGroup = (RadioGroup) findViewById(R.id.hdGroup);
         TextView nameTv = (TextView) findViewById(R.id.dev_name_tv);
         Drawable dwLeft = getResources().getDrawable(R.drawable.web_cam2_128px);
         dwLeft.setBounds(0, 0, 40, 40);
@@ -45,8 +48,15 @@ public class DevSettingsActivity extends AppCompatActivity {
         if (position != -1) {
             myData = mDatas.get(position);
             devName.setText((String) myData.get("name"));
+            actionBar.setTitle("調整 - " + myData.get("model"));
+            if (myData.get("isHd") == null) {
+                myData.put("isHd", false);
+            }
+            if ((boolean) myData.get("isHd")) {
+                // TODO: 2017/11/21  make radiobutton checked 
+            }
         }
-        actionBar.setTitle("調整 - " + myData.get("model"));
+
 
     }
 

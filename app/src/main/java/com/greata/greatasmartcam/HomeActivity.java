@@ -307,7 +307,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "我的攝像機2 ", false, "鴻優視 1080P");
+            addItem(android.R.color.black, "我的攝像機2 ", false, "鴻優視 1080P", false);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);
@@ -348,13 +348,14 @@ public class HomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void addItem(int imgID, String name, boolean state, String model) {
+    private void addItem(int imgID, String name, boolean state, String model, boolean hd) {
         mMap = new HashMap<String, Object>();
         mMap.put("screenshot", imgID);
         Log.d(TAG, "addItem: imgid" + imgID);
         mMap.put("name", name);
         mMap.put("state", state);
         mMap.put("model", model);
+        mMap.put("isHd", hd);
         mDatas.add(mMap);
         mListDataSave.setDataList(ListDataSave.DEVICE_TAG, mDatas);
     }
