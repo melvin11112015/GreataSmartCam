@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
@@ -93,7 +95,11 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         BroadcastUtils.sendFinishActivityBroadcast(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(zoomDrawable(getResources().getDrawable(R.drawable.logo), 150, 150));
+        Drawable logoDraw = zoomDrawable(getResources().getDrawable(R.drawable.logo), 130, 130);
+        if (Build.VERSION.SDK_INT >= 21) {
+            logoDraw.setTint(Color.WHITE);
+        }
+        toolbar.setLogo(logoDraw);
 
         setSupportActionBar(toolbar);
         noItemText = (Button) findViewById(R.id.noItemText);

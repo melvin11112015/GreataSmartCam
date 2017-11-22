@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:text="正在查找摄像头..."
+        android:text="正在查找攝像機 ..."
         android:textSize="30sp" />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:text="一些提示" />
+        android:text="請等候" />
 
     <Button
         android:id="@+id/button2"
@@ -31,7 +31,7 @@
         android:layout_margin="50dp"
         android:layout_weight="1"
         android:background="@color/colorAccent"
-        android:text="继续查找"
+        android:text="繼續查找"
         android:textColor="@android:color/white"
         android:textSize="25sp"
         android:textStyle="bold" />

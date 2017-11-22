@@ -8,6 +8,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -125,18 +126,34 @@ public class AddDeviceActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
+        Toast toast;
         switch (v.getId()) {
             case R.id.button_next_0:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f2).addToBackStack(null).commit();
                 break;
             case R.id.button_next_2:
                 if (editSSID.getText().toString().equals("")) {
-                    Toast toast = Toast.makeText(AddDeviceActivity.this, "請輸入" + getResources().getString(R.string.ssid_connect_text), Toast.LENGTH_SHORT);
+                    toast = Toast.makeText(AddDeviceActivity.this, "請輸入" + getResources().getString(R.string.ssid_connect_text), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     return;
                 }
-                fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).show(f3).addToBackStack(null).commit();
+                if (!NetWorkUtils.isWifiConnected(this)) {
+                    toast = Toast.makeText(AddDeviceActivity.this, "請連接手機與WiFi網路 ", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    return;
+                }
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        //execute the task
+                        Toast toast = Toast.makeText(AddDeviceActivity.this, "當前網路環境不適合匹配攝像機，請查看說明書並配寘無線路由器。 ", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                }, 800);
+
+                //fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f2).show(f3).addToBackStack(null).commit();
                 break;
         }
     }
@@ -165,29 +182,29 @@ public class AddDeviceActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Log.i(WIFI, "doInBackground(Params... params) called");
             try {
-                list = new ArrayList<String>();
-
-                list.add("鴻優視 720P");
-                list.add("鴻優視 1080P");
-                list.add("鴻優視 2S 720P");
-                list.add("鴻優視 2S 1080P");
-                list.add("鴻優視 Cloud 720P");
-                list.add("鴻優視 Cloud 1080P");
-                adapter = new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_spinner_item, list);
-                adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-
-                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                ssidList = new ArrayList<String>();
-                List<WifiConfiguration> wifiConfigurationList = wifiManager.getConfiguredNetworks();
-                if (wifiConfigurationList != null) {
-
-
-                for (int i = 0; i < wifiConfigurationList.size(); i++) {
-                    Log.d(WIFI, "" + wifiConfigurationList.get(i).SSID);
-                    ssidList.add(wifiConfigurationList.get(i).SSID.replaceAll("\"", ""));
+                if (list == null) {
+                    list = new ArrayList<String>();
+                    list.add("鴻優視 720P");
+                    list.add("鴻優視 1080P");
+                    list.add("鴻優視 2S 720P");
+                    list.add("鴻優視 2S 1080P");
+                    list.add("鴻優視 Cloud 720P");
+                    list.add("鴻優視 Cloud 1080P");
+                    adapter = new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_spinner_item, list);
+                    adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
                 }
-                    Log.d(WIFI, "doInBackground: EDITSSID=NULL?");
-                    Log.d(WIFI, "doInBackground: EDITSSID!=NULL");
+                if (ssidList == null || ssidList.isEmpty()) {
+                    WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                    ssidList = new ArrayList<String>();
+                    List<WifiConfiguration> wifiConfigurationList = wifiManager.getConfiguredNetworks();
+                    if (wifiConfigurationList != null) {
+                        for (int i = 0; i < wifiConfigurationList.size(); i++) {
+                            Log.d(WIFI, "" + wifiConfigurationList.get(i).SSID);
+                            ssidList.add(wifiConfigurationList.get(i).SSID.replaceAll("\"", ""));
+                        }
+                        Log.d(WIFI, "doInBackground: EDITSSID=NULL?");
+                        Log.d(WIFI, "doInBackground: EDITSSID!=NULL");
+                    }
                 }
             } catch (Exception e) {
                 Log.e(WIFI, e.getMessage());
@@ -215,6 +232,13 @@ public class AddDeviceActivity extends AppCompatActivity {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         if (event.getX() >= (editSSID.getWidth() - editSSID
                                 .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            if (!NetWorkUtils.isWifiConnected(AddDeviceActivity.this)) {
+                                Toast toast = Toast.makeText(AddDeviceActivity.this, "請連接手機與WiFi網路 ", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                                return true;
+                            }
+                            (new WifiTask()).execute();
                             listPopupWindow = new ListPopupWindow(AddDeviceActivity.this);
                             listPopupWindow.setAdapter(new ArrayAdapter<String>(AddDeviceActivity.this, android.R.layout.simple_list_item_1, ssidList));
                             listPopupWindow.setAnchorView(editSSID);
