@@ -4,13 +4,12 @@
         android:defaultValue="true"
         android:key="example_switch"
         android:summary="@string/pref_description_social_recommendations"
-        android:title="@string/pref_title_social_recommendations" />
-
+        android:title="接收攝像機提醒通知 " />
     <SwitchPreference
         android:defaultValue="false"
         android:key="example_switch2"
         android:summary="開啟後，截圖和錄影數據將存儲到攝像機的外置記憶體。關閉則存儲到手機中。  "
-        android:title="數據存儲到攝像機外置記憶體" />
+        android:title="數據存儲到攝像機儲存空間 " />
 
     <SwitchPreference
         android:defaultValue="true"

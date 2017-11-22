@@ -1,74 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffeeeede"
-    android:divider="@android:drawable/divider_horizontal_textfield"
-    android:orientation="vertical"
-    android:showDividers="middle">
-
-    <TextView
-        android:id="@+id/dev_name_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="攝像機名稱"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp" />
-
-    <EditText
-        android:id="@+id/dev_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:text="Name" />
-
-    <Switch
-        android:id="@+id/switch3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:padding="10dp"
-        android:text="使用流動資料傳輸 "
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp" />
+    android:background="#ffeeeede">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:background="#ffeeeede"
+        android:divider="@android:drawable/divider_horizontal_textfield"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="影片質素"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp" />
+            android:orientation="vertical">
 
-        <RadioGroup
-            android:id="@+id/hdGroup"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/dev_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="攝像機名稱"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/dev_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:text="Name" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="性别">
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/radioButton"
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:padding="10dp"
+                android:text="使用流動數據傳輸 "
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/switch1_desc" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switch2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="流暢" />
+                android:padding="10dp"
+                android:text="@string/pref_title_social_recommendations"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
 
-            <RadioButton
-                android:id="@+id/radioButton2"
+            <TextView
+                android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="清晰" />
-        </RadioGroup>
-    </LinearLayout>
+                android:layout_marginLeft="10dp"
+                android:text="@string/switch2_desc" />
+        </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switch3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="10dp"
+                android:text="儲存空間過低提醒"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/switch3_desc" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switch4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:enabled="false"
+                android:padding="10dp"
+                android:text="意外關機提醒"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/switch4_desc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="影片質素"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp" />
+
+            <RadioGroup
+                android:id="@+id/hdGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="性别">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="流暢" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonHD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="清晰" />
+            </RadioGroup>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

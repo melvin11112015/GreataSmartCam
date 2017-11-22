@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class DevSettingsActivity extends AppCompatActivity {
     private List<Map<String, Object>> mDatas;
     private Map<String, Object> myData;
     private ActionBar actionBar;
-    private RadioGroup sexGroup;
+    private RadioButton radioButtonSD, radioButtonHD;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,13 +37,14 @@ public class DevSettingsActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("pos", -1);
         mListDataSave = new ListDataSave(this, "devices");
         mDatas = mListDataSave.getDataList(ListDataSave.DEVICE_TAG);
-        sexGroup = (RadioGroup) findViewById(R.id.hdGroup);
         TextView nameTv = (TextView) findViewById(R.id.dev_name_tv);
         Drawable dwLeft = getResources().getDrawable(R.drawable.web_cam2_128px);
         dwLeft.setBounds(0, 0, 40, 40);
         Drawable dwLeftC = DrawableCompat.wrap(dwLeft);
         DrawableCompat.setTint(dwLeftC, getResources().getColor(R.color.colorPrimary));
         nameTv.setCompoundDrawables(dwLeftC, null, null, null);
+        radioButtonHD = (RadioButton) findViewById(R.id.radioButtonHD);
+        radioButtonSD = (RadioButton) findViewById(R.id.radioButtonSD);
         devName = (EditText) findViewById(R.id.dev_name);
         if (position != -1) {
             myData = mDatas.get(position);
@@ -53,7 +54,11 @@ public class DevSettingsActivity extends AppCompatActivity {
                 myData.put("isHd", false);
             }
             if ((boolean) myData.get("isHd")) {
-                // TODO: 2017/11/21  make radiobutton checked 
+                radioButtonSD.setChecked(false);
+                radioButtonHD.setChecked(true);
+            } else {
+                radioButtonSD.setChecked(true);
+                radioButtonHD.setChecked(false);
             }
         }
 
@@ -76,6 +81,7 @@ public class DevSettingsActivity extends AppCompatActivity {
         super.onPause();
         if (position != -1) {
             myData.put("name", devName.getText().toString());
+            myData.put("isHd", radioButtonHD.isChecked());
             mDatas.set(position, myData);
             mListDataSave.setDataList(ListDataSave.DEVICE_TAG, mDatas);
         }
