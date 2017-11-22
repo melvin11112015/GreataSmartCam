@@ -1,25 +1,17 @@
 package com.greata.greatasmartcam;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -107,6 +99,7 @@ public class RecordActivity extends AppCompatActivity {
             LinearLayout content = rootView.findViewById(R.id.record_content);
             TextView stateTextView = rootView.findViewById(R.id.section_label);
             Button loginButton = rootView.findViewById(R.id.login_btn);
+            ImageView imgCloud = rootView.findViewById(R.id.imageCloud);
             ListView recList = rootView.findViewById(R.id.rec_list);
             TextView storageText = rootView.findViewById(R.id.storage_text);
             List<Integer> recData = new ArrayList<Integer>();
@@ -116,6 +109,7 @@ public class RecordActivity extends AppCompatActivity {
             recList.setAdapter(new MyRecAdapter(getContext(), recData));
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 0) {
                 loginButton.setVisibility(View.INVISIBLE);
+                imgCloud.setVisibility(View.INVISIBLE);
                 if (getArguments().getBoolean("state")) {
                     content.setVisibility(View.VISIBLE);
                     stateTextView.setVisibility(View.INVISIBLE);
@@ -128,6 +122,7 @@ public class RecordActivity extends AppCompatActivity {
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
                 content.setVisibility(View.INVISIBLE);
+                imgCloud.setVisibility(View.VISIBLE);
                 loginButton.setVisibility(View.VISIBLE);
                 stateTextView.setText(R.string.greata_cloud);
                 stateTextView.setVisibility(View.VISIBLE);

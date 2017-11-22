@@ -45,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:autoLink="web|email|phone"
         android:text="@string/dialog_contact" />
 
     <TextView
@@ -53,14 +54,17 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="《用戶使用條款及細則》 " />
+        android:text="《用戶使用條款及細則》 "
+        android:textColor="@color/colorAccent" />
 
     <TextView
         android:id="@+id/textView22"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="《私隱保護聲明 》 " />
+        android:text="《私隱保護聲明 》 "
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent" />
 
     <TextView
         android:id="@+id/textView17"

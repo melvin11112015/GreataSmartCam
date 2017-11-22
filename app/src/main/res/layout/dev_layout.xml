@@ -24,7 +24,7 @@
                 android:padding="10dp"
                 android:text="攝像機名稱"
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/dev_name"
@@ -51,7 +51,7 @@
                 android:padding="10dp"
                 android:text="使用流動數據傳輸 "
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -77,7 +77,7 @@
                 android:padding="10dp"
                 android:text="@string/pref_title_social_recommendations"
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -101,7 +101,7 @@
                 android:padding="10dp"
                 android:text="儲存空間過低提醒"
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -127,7 +127,7 @@
                 android:padding="10dp"
                 android:text="意外關機提醒"
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -150,7 +150,7 @@
                 android:layout_weight="1"
                 android:text="影片質素"
                 android:textColor="@color/colorPrimary"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <RadioGroup
                 android:id="@+id/hdGroup"
