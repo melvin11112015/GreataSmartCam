@@ -94,7 +94,7 @@ public class RecordActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            // TODO: 2017/11/1 传入state参数作为检查设备是否连线
+
             View rootView = inflater.inflate(R.layout.fragment_record, container, false);
             LinearLayout content = rootView.findViewById(R.id.record_content);
             TextView stateTextView = rootView.findViewById(R.id.section_label);

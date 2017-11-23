@@ -53,11 +53,6 @@
             android:label="錄影記錄"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver
-            android:name=".WifiReceiver"
-            android:enabled="true"
-            android:exported="false" />
-
     </application>
 
 </manifest>

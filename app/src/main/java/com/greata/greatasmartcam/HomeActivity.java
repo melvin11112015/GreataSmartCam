@@ -118,25 +118,10 @@ public class HomeActivity extends AppCompatActivity
         playList = (ListView) findViewById(R.id.play_list);
 
         mDatas = new ArrayList<Map<String, Object>>();
-        // mAdapter = new SimpleAdapter(this, mDatas, R.layout.item_home, new String[]{"screenshot", "name"}, new int[]{R.id.video_img, R.id.id_num});
+
         mAdapter = new MyAdapter(this, mDatas);
         playList.setAdapter(mAdapter);
-       /* mAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Object data,
-                                        String textRepresentation) {
-                //判断是否为我们要处理的对象
-                if (view instanceof ImageView) {
-                    Log.d(TAG, "setViewValue: data" + Double.valueOf(textRepresentation).intValue());
 
-                    ImageView iv = (ImageView) view;
-                    Drawable mDrawable = getApplicationContext().getResources().getDrawable(Double.valueOf(textRepresentation).intValue());
-                    iv.setImageDrawable(mDrawable);
-
-                    return true;
-                } else
-                    return false;
-            }
-        });*/
         myToolB = (GridLayout) findViewById(R.id.home_toolbar);
         myToolB.setVisibility(View.INVISIBLE);
         checkedPos = playList.getCheckedItemPosition();
@@ -344,7 +329,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "我的攝像機2 ", false, "鴻優視 1080P", false);
+            addItem(android.R.color.black, "我的攝像機2 ", true, "鴻優視 2S 720P", false);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);

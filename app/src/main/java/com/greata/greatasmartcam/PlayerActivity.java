@@ -1,21 +1,27 @@
 package com.greata.greatasmartcam;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -163,14 +169,14 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private TextClock mTextClock;
 
+    private ImageButton screenShotBtn;
+
 
     private boolean shouldAutoPlay;
 
     private int resumeWindow;
 
     private long resumePosition;
-
-    private WifiReceiver mWifiReceiver;
 
 
     // Fields used only for ad playback. The ads loader is loaded via reflection.
@@ -190,6 +196,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     private String htmlStr2 = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:";
     private SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
     // Activity lifecycle
+    private NetReceiver mNetReceiver;
 
     private static boolean isBehindLiveWindow(ExoPlaybackException e) {
 
@@ -237,6 +244,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             e.printStackTrace();
         }
     }
+
     public boolean isLandscape() {
         /*   * 通过API动态改变当前屏幕的显示方向   */
 
@@ -293,7 +301,13 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                     recFrame.setVisibility(View.VISIBLE);
                 } else {
                     recFrame.setVisibility(View.INVISIBLE);
-                    showToast("錄影存儲到 ");
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            //execute the task
+                            showToast("錄影存儲到" + Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + "2017" + (new Date()).getTime() + ".mp4");
+                        }
+                    }, 1000);
+
                 }
             }
         });
@@ -309,14 +323,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         retryButton = findViewById(R.id.retry_button);
 
         retryButton.setOnClickListener(this);
-/*
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        mWifiReceiver = new WifiReceiver();
-        registerReceiver(mWifiReceiver, filter);
-*/
+
         mTextClock = findViewById(R.id.textClock);
         mTextClock.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
 
@@ -344,11 +351,11 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             }
         });
 
-        ImageButton screenShotBtn = findViewById(R.id.screenshot_btn);
+        screenShotBtn = findViewById(R.id.screenshot_btn);
         screenShotBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("截圖保存到 ");
+                showToast("截圖保存到 " + Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + "2017" + (new Date()).getTime() + ".jpg");
             }
         });
 
@@ -372,12 +379,23 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         mTextClock.setFreezesText(true);
         simpleExoPlayerView.setControllerVisibilityListener(this);
         simpleExoPlayerView.requestFocus();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        mNetReceiver = new NetReceiver();
+
         if (NetWorkUtils.isWifiConnected(this)) {
             shouldAutoPlay = true;
             mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
         } else {
             showNormalDialog();
         }
+
+
+        registerReceiver(mNetReceiver, filter);
+
     }
 
     private void showNormalDialog() {
@@ -495,7 +513,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         releaseAdsLoader();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-        //unregisterReceiver(mWifiReceiver);
+        unregisterReceiver(mNetReceiver);
 
     }
 
@@ -526,9 +544,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         Log.d("Test", "rotate");
     }
 
-
-    // Activity input
-
     @Override
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -550,7 +565,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // OnClickListener methods
+    // Activity input
 
     @Override
 
@@ -563,7 +578,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // PlaybackControlView.VisibilityListener implementation
+    // OnClickListener methods
 
     @Override
 
@@ -590,7 +605,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     }
 
 
-    // Internal methods
+    // PlaybackControlView.VisibilityListener implementation
 
     @Override
 
@@ -599,6 +614,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         debugRootView.setVisibility(visibility);
 
     }
+
+
+    // Internal methods
 
     private void initializePlayer() {
 
@@ -1002,9 +1020,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
-    // Player.EventListener implementation
-
     private void releaseAdsLoader() {
 
         if (imaAdsLoader != null) {
@@ -1034,6 +1049,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         }
 
     }
+
+
+    // Player.EventListener implementation
 
     @Override
 
@@ -1195,9 +1213,6 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     }
 
-
-    // User controls
-
     @Override
 
     @SuppressWarnings("ReferenceEquality")
@@ -1235,6 +1250,9 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         }
 
     }
+
+
+    // User controls
 
     private void updateButtonVisibilities() {
 
@@ -1328,6 +1346,39 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
+    }
+
+    private class NetReceiver extends BroadcastReceiver {
+        private Date stopDate;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (shouldAutoPlay) {
+                if (!NetWorkUtils.isNetworkConnected(context)) {
+                    if (stopDate == null) {
+                        stopDate = new Date();
+                    }
+
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            //execute the task
+                            if (!NetWorkUtils.isNetworkConnected(getApplicationContext()))
+                                showToast("無法連結網路");
+                        }
+                    }, 1000);
+                    mTextClock.setFormat24Hour(Html.fromHtml(htmlStr2) + sdf.format(stopDate));
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    recVideoButton.setEnabled(false);
+                    screenShotBtn.setEnabled(false);
+                } else {
+                    mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    recVideoButton.setEnabled(true);
+                    screenShotBtn.setEnabled(true);
+                    stopDate = null;
+                }
+            }
+        }
     }
 
 
