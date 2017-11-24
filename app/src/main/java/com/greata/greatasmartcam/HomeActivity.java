@@ -329,7 +329,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             addDevice();
         } else if (id == R.id.nav_slideshow) {
-            addItem(android.R.color.black, "我的攝像機2 ", true, "鴻優視 2S 720P", false);
+            addItem(android.R.color.black, "我的攝影機2 ", true, "鴻優視 2S 720P", false);
             itemsCheck();
         } else if (id == R.id.nav_manage) {
             intent = new Intent(HomeActivity.this, SettingsActivity.class);

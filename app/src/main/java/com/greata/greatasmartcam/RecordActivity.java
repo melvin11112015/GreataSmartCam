@@ -113,7 +113,7 @@ public class RecordActivity extends AppCompatActivity {
                 if (getArguments().getBoolean("state")) {
                     content.setVisibility(View.VISIBLE);
                     stateTextView.setVisibility(View.INVISIBLE);
-                    storageText.setText("攝像機總存儲空間:7.47GB 已使用存儲空間:5.32GB");
+                    storageText.setText("攝影機總存儲空間:7.47GB 已使用存儲空間:5.32GB");
                 } else {
                     content.setVisibility(View.INVISIBLE);
                     stateTextView.setVisibility(View.VISIBLE);
@@ -263,7 +263,7 @@ public class RecordActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "攝像機存儲";
+                    return "攝影機存儲";
                 case 1:
                     return "雲端存儲";
                 case 2:

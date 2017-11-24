@@ -88,7 +88,7 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_social_recommendations">移動目標偵測提醒 </string>
-    <string name="pref_description_social_recommendations">當攝像機偵察到移動目標或儲存空間過低時 時，向手機通知發送提醒消息
+    <string name="pref_description_social_recommendations">當攝影機偵察到移動目標或儲存空間過低時 時，向手機通知發送提醒消息
     </string>
 
     <string name="pref_title_display_name">Display name</string>
@@ -154,7 +154,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <string-array name="list_help_q">
-        <item>應用程式和攝像機的配對方法</item>
+        <item>應用程式和攝影機的配對方法</item>
         <item>操作恢復出廠設定</item>
         <item>WiFi連接不上的原因</item>
     </string-array>
@@ -170,14 +170,16 @@
     </string-array>
     <string name="title_activity_record">RecordActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="no_connection">未連接攝像機，不能訪問攝像機的存儲空間。</string>
-    <string name="ssid_connect_text">攝像機連接WiFi的SSID</string>
+    <string name="no_connection">未連接攝影機，不能訪問攝影機的存儲空間。</string>
+    <string name="ssid_connect_text">攝影機連接WiFi的SSID</string>
     <string name="no_google">錯誤:沒有檢測到 Google Play 服務</string>
     <string name="greata_cloud">歡迎登陸Greata帳戶使用雲端存儲服務 </string>
-    <string name="no_network">無法連結攝像機，請檢查網路和攝像機設定</string>
+    <string name="no_network">無法連結攝影機，請檢查網路和攝像機設定</string>
     <string name="network_tips">正在使用流動數據流量，可能導致電訊運營商收取額外費用。是否確定繼續觀看？</string>
-    <string name="switch1_desc">開啟後，使用3G/4G流動數據觀看攝像機影像時不會出現提示框。</string>
-    <string name="switch2_desc">開啟後，當攝像機偵察到移動目標時向手機發送警報。</string>
-    <string name="switch3_desc">開啟後，當攝像機的儲存空間過低時向手機發送提醒。</string>
-    <string name="switch4_desc">開啟後，當攝像機遇到斷電關機前向手機發送提醒。</string>
+    <string name="switch1_desc">開啟後，使用3G/4G流動數據觀看攝影機影像時不會出現提示框。</string>
+    <string name="switch2_desc">開啟後，當攝影機偵察到移動目標時向手機發送警報。</string>
+    <string name="switch3_desc">開啟後，當攝影機的儲存空間過低時向手機發送提醒。</string>
+    <string name="switch4_desc">開啟後，當攝影機遇到斷電關機前向手機發送提醒。</string>
+    <string name="unmatch_device">當前網路環境不適合匹配攝影機，請查看說明書並配寘無線路由器。</string>
+    <string name="con_phone_net">請連接手機與WiFi網路</string>
 </resources>

@@ -56,7 +56,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_device);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("根據提示新增攝像機 ");
+        actionBar.setTitle("根據提示新增攝影機 ");
         f0 = AddFragment.newInstance(R.layout.fragment_a);
         f2 = AddFragment.newInstance(R.layout.fragment_two);
         f3 = AddFragment.newInstance(R.layout.fragment_three);
@@ -139,7 +139,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                     return;
                 }
                 if (!NetWorkUtils.isWifiConnected(this)) {
-                    toast = Toast.makeText(AddDeviceActivity.this, "請連接手機與WiFi網路 ", Toast.LENGTH_SHORT);
+                    toast = Toast.makeText(AddDeviceActivity.this, R.string.con_phone_net, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     return;
@@ -147,7 +147,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
                         //execute the task
-                        Toast toast = Toast.makeText(AddDeviceActivity.this, "當前網路環境不適合匹配攝像機，請查看說明書並配寘無線路由器。 ", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(AddDeviceActivity.this, R.string.unmatch_device, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }
@@ -233,7 +233,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                         if (event.getX() >= (editSSID.getWidth() - editSSID
                                 .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                             if (!NetWorkUtils.isWifiConnected(AddDeviceActivity.this)) {
-                                Toast toast = Toast.makeText(AddDeviceActivity.this, "請連接手機與WiFi網路 ", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(AddDeviceActivity.this, R.string.con_phone_net, Toast.LENGTH_SHORT);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                                 return true;
