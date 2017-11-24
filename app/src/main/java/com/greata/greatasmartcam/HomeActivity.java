@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -183,7 +184,12 @@ public class HomeActivity extends AppCompatActivity
             intent.setClass(HomeActivity.this, RecordActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    //execute the task
+                    Toast.makeText(HomeActivity.this, R.string.no_network, Toast.LENGTH_SHORT).show();
+                }
+            }, 800);
         }
     }
 

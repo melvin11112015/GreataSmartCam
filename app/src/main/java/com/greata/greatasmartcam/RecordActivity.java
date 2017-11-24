@@ -1,7 +1,10 @@
 package com.greata.greatasmartcam;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +46,19 @@ public class RecordActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    public void showPlay2(View v) {
+        if (NetWorkUtils.isNetworkConnected(this)) {
+            Intent mIntent = new Intent(this, PlayerActivity.class);
+            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+            //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+            mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
+            mIntent.putExtra("title", getIntent().getStringExtra("name"));
+            mIntent.setAction(PlayerActivity.ACTION_VIEW);
+            startActivity(mIntent);
+        } else {
+            Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +123,7 @@ public class RecordActivity extends AppCompatActivity {
             recData.add(0);
             recData.add(1);
             recData.add(2);
+            recData.add(3);
             recList.setAdapter(new MyRecAdapter(getContext(), recData));
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 0) {
                 loginButton.setVisibility(View.INVISIBLE);
@@ -120,6 +138,7 @@ public class RecordActivity extends AppCompatActivity {
                     stateTextView.setText(R.string.no_connection);
                 }
             }
+
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
                 content.setVisibility(View.INVISIBLE);
                 imgCloud.setVisibility(View.VISIBLE);
@@ -162,10 +181,13 @@ public class RecordActivity extends AppCompatActivity {
 
         class MyRecAdapter extends BaseAdapter {
 
+            SimpleDateFormat format = new SimpleDateFormat("HH");
+            Calendar c = Calendar.getInstance();
             private Context context;
             private List<Integer> dataList;
             private boolean isLoading;
             private SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日");//设置日期格式
+
 
             public MyRecAdapter(Context context, List dataList) {
                 super();
@@ -221,9 +243,12 @@ public class RecordActivity extends AppCompatActivity {
                         case 3:
                         case 4:
                         case 5:
+                            c.add(Calendar.HOUR, -1);
+                            String start = format.format(c.getTime()) + ":00";
                             holder.showItem();
                             holder.recImage.setBackgroundColor(cint);
-                            holder.recTextView.setText("1111");
+                            holder.recImage.setImageResource(R.drawable.vid_pic);
+                            holder.recTextView.setText(start);
                             break;
                         default:
                             break;
