@@ -6,9 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
+import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,6 +23,15 @@ public class SplashActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(),
+                    PackageManager.GET_META_DATA);
+            String value = appInfo.metaData.getString("MY_COPY_RIGHT");
+            TextView ctv = (TextView) findViewById(R.id.cpright);
+            ctv.setText(value);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }  
         registerFinishReciver();
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent();

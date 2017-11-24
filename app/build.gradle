@@ -18,6 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        kuan {
+            manifestPlaceholders = [CHANNEL_VALUE: "kuan", APP_NAME: "鴻優視™智慧攝影機", COPY_RIGHT: "Copyright © 2009-2017 鴻亞國際有限公司"]
+        }
+        xiaomi {
+            manifestPlaceholders = [CHANNEL_VALUE: "xiaomi", APP_NAME: "APP", COPY_RIGHT: "丰"]
+        }
+
+    }
 }
 repositories {
     jcenter()
