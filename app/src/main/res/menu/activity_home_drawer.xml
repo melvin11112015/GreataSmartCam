@@ -7,11 +7,12 @@
             android:checked="true"
             android:icon="@drawable/add_744pxpng"
             android:title="新增設備" />
+        <!--
         <item
             android:id="@+id/nav_slideshow"
             android:checked="true"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Slideshow" /> -->
         <item
             android:id="@+id/nav_manage"
             android:checked="true"

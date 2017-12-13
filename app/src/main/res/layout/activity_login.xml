@@ -110,7 +110,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="或注册稱為Greata會員 "
+                android:text="或注册為Greata會員 "
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
