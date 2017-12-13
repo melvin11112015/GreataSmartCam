@@ -1,9 +1,6 @@
 package com.greata.greatasmartcam;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -22,7 +19,7 @@ public class HelpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         helpList = (ListView) findViewById(R.id.help_qa_list);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getResources().getStringArray(R.array.list_help_q));
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.list_help_q));
         helpList.setAdapter(arrayAdapter);
         helpList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
