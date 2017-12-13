@@ -237,6 +237,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void googleReq(View v) {
         Toast.makeText(this, R.string.no_google, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
     }
 
     private void newMTask() {
