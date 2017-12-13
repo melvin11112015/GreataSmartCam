@@ -53,6 +53,7 @@ public class RecordActivity extends AppCompatActivity {
             //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
             mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
             mIntent.putExtra("title", getIntent().getStringExtra("name"));
+            mIntent.putExtra("rec", true);
             mIntent.setAction(PlayerActivity.ACTION_VIEW);
             startActivity(mIntent);
         } else {

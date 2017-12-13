@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.greata.greatasmartcam"
         minSdkVersion 17
@@ -18,11 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // Specifies a flavor dimension.
+    flavorDimensions "store"
     productFlavors {
         kuan {
+            dimension "store"
             manifestPlaceholders = [CHANNEL_VALUE: "kuan", APP_NAME: "鴻優視™智慧攝影機", COPY_RIGHT: "Copyright © 2009-2017 鴻亞國際有限公司"]
         }
         xiaomi {
+            dimension "store"
             manifestPlaceholders = [CHANNEL_VALUE: "xiaomi", APP_NAME: "APP", COPY_RIGHT: "丰"]
         }
 
