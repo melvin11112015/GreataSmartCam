@@ -21,7 +21,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -188,7 +187,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private ViewGroup adOverlayViewGroup;
 
-    private ToggleButton lockScreenButton, recVideoButton;
+    private ToggleButton lockScreenButton, recVideoButton, playPauseButton, soundBtn;
 
     private FrameLayout.LayoutParams pParams, lParams;
 
@@ -279,6 +278,18 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         setContentView(R.layout.player_activity);
 
+        playPauseButton = findViewById(R.id.play_pause_btn);
+        playPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    // TODO: 2017/12/26 stop timming
+                } else {
+                    // TODO: 2017/12/26  starttiming
+                }
+            }
+        });
+
         lockScreenButton = findViewById(R.id.lockscreen_btn);
         lockScreenButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -311,6 +322,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                 }
             }
         });
+
 
         View rootView = findViewById(R.id.root);
 
@@ -359,7 +371,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             }
         });
 
-        ToggleButton soundBtn = findViewById(R.id.sound_btn);
+        soundBtn = findViewById(R.id.sound_btn);
         soundBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -393,8 +405,19 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             showNormalDialog();
         }
 
-
         registerReceiver(mNetReceiver, filter);
+
+        if (getIntent().getBooleanExtra("rec", false)) {
+            playPauseButton.setVisibility(View.VISIBLE);
+            recVideoButton.setVisibility(View.GONE);
+            screenShotBtn.setVisibility(View.GONE);
+            soundBtn.setVisibility(View.GONE);
+        } else {
+            playPauseButton.setVisibility(View.GONE);
+            recVideoButton.setVisibility(View.VISIBLE);
+            screenShotBtn.setVisibility(View.VISIBLE);
+            soundBtn.setVisibility(View.VISIBLE);
+        }
 
     }
 
