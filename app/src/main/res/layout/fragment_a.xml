@@ -52,7 +52,8 @@
         android:layout_marginBottom="52dp"
         android:onClick="onClick"
         android:text="紅燈已經閃爍"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:ignore="OnClick" />
 
     <TextView
         android:id="@+id/textView16"
@@ -61,7 +62,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="27dp"
-        android:text="紅燈沒有閃爍?" />
+        android:onClick="onHelpClick"
+        android:text="紅燈沒有閃爍?"
+        tools:ignore="OnClick" />
 
     <TextView
         android:id="@+id/textView12"

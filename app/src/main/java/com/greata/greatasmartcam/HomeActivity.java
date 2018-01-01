@@ -105,6 +105,13 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         noItemText = (Button) findViewById(R.id.noItemText);
         noItemText.setVisibility(View.INVISIBLE);
+        noItemText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                addItem(android.R.color.black, "我的攝影機2 ", System.currentTimeMillis() % 2 == 1, "鴻優視 2S 720P", false);
+                return true;
+            }
+        });
         playImg = (ImageView) findViewById(R.id.play_img);
         mListDataSave = new ListDataSave(this, "devices");
 
@@ -259,6 +266,11 @@ public class HomeActivity extends AppCompatActivity
         if (NetWorkUtils.isNetworkConnected(this) && (boolean) mDatas.get(pos).get("state")) {
             Intent mIntent = new Intent(HomeActivity.this, PlayerActivity.class);
             mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+            if (mDatas.get(pos).get("switch1") != null) {
+                mIntent.putExtra("isNetChecked?", (boolean) mDatas.get(pos).get("switch1"));
+            } else {
+                mIntent.putExtra("isNetChecked?", false);
+            }
             //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
             mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
             mIntent.putExtra("title", (String) mDatas.get(pos).get("name"));

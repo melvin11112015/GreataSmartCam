@@ -2,6 +2,8 @@ package com.greata.greatasmartcam;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiConfiguration;
@@ -9,8 +11,10 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.method.HideReturnsTransformationMethod;
@@ -125,11 +129,32 @@ public class AddDeviceActivity extends AppCompatActivity {
         fManager.beginTransaction().hide(f2).hide(f3).commit();
     }
 
+    public void onHelpClick(View v) {
+        Intent intent = new Intent(AddDeviceActivity.this, HelpActivity.class);
+        startActivity(intent);
+        AddDeviceActivity.this.finish();
+    }
+
     public void onClick(View v) {
         Toast toast;
         switch (v.getId()) {
             case R.id.button_next_0:
                 fManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).hide(f0).show(f2).addToBackStack(null).commit();
+                if (!NetWorkUtils.isWifiConnected(AddDeviceActivity.this)) {
+                    final AlertDialog.Builder normalDialog =
+                            new AlertDialog.Builder(AddDeviceActivity.this);
+                    normalDialog.setMessage("請將手機與即將配對攝像機的WiFi網絡連接");
+                    normalDialog.setPositiveButton("設定WiFi ", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                            startActivity(intent);
+                            AddDeviceActivity.this.finish();
+                        }
+                    });
+                    normalDialog.setNegativeButton("取消", null);
+                    normalDialog.show();
+                }
                 break;
             case R.id.button_next_2:
                 if (editSSID.getText().toString().equals("")) {

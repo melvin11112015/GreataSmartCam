@@ -214,6 +214,8 @@
     <string name="error_invalid_password">密碼長度過短</string>
     <string name="error_incorrect_password">密碼不正確</string>
     <string name="error_field_required">此項不能為空</string>
+    <string name="video_enable_delete">自動清除視頻 </string>
+    <string name="switch22_desc">開啟後，自動清除記憶體中設定時間以前的視頻存檔 。</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

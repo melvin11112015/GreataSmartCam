@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import java.util.List;
 public class RecordActivity extends AppCompatActivity {
 
     private static boolean deviceState;
+    private Intent gIntent;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -46,25 +48,11 @@ public class RecordActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    public void showPlay2(View v) {
-        if (NetWorkUtils.isNetworkConnected(this)) {
-            Intent mIntent = new Intent(this, PlayerActivity.class);
-            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
-            //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
-            mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
-            mIntent.putExtra("title", getIntent().getStringExtra("name"));
-            mIntent.putExtra("rec", true);
-            mIntent.setAction(PlayerActivity.ACTION_VIEW);
-            startActivity(mIntent);
-        } else {
-            Toast.makeText(this, R.string.no_network, Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        gIntent = getIntent();
         deviceState = getIntent().getBooleanExtra("state", false);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -139,6 +127,26 @@ public class RecordActivity extends AppCompatActivity {
                     stateTextView.setText(R.string.no_connection);
                 }
             }
+            recList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position >= 1) {
+                        if (NetWorkUtils.isNetworkConnected(getActivity())) {
+                            Intent mIntent = new Intent(getActivity(), PlayerActivity.class);
+                            mIntent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, false);
+                            //mIntent.setData(Uri.parse("http://playertest.longtailvideo.com/adaptive/bipbop/gear4/prog_index.m3u8"));
+                            mIntent.setData(Uri.parse(Environment.getExternalStorageDirectory() + "/DCIM/Camera/VID.mp4"));
+                            mIntent.putExtra("title", getActivity().getIntent().getStringExtra("name"));
+                            mIntent.putExtra("rec", true);
+                            mIntent.putExtra("rec_time_offset", position);
+                            mIntent.setAction(PlayerActivity.ACTION_VIEW);
+                            startActivity(mIntent);
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), R.string.no_network, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
 
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
                 content.setVisibility(View.INVISIBLE);

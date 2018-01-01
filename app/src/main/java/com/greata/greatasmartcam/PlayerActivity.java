@@ -16,6 +16,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -27,11 +28,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +91,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -148,7 +152,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private TextView debugTextView;
 
-    private TextView playerTitle, recFrame;
+    private TextView playerTitle, recFrame, seekTime;
 
     private Button retryButton;
 
@@ -168,6 +172,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private TextClock mTextClock;
 
+    private Chronometer mChronometer;
+
     private ImageButton screenShotBtn;
 
 
@@ -177,6 +183,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private long resumePosition;
 
+    private boolean clockMode;
 
     // Fields used only for ad playback. The ads loader is loaded via reflection.
 
@@ -187,15 +194,21 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
     private ViewGroup adOverlayViewGroup;
 
-    private ToggleButton lockScreenButton, recVideoButton, playPauseButton, soundBtn;
+    private ToggleButton lockScreenButton, recVideoButton, playPauseButton, soundBtn, playbackPause;
 
     private FrameLayout.LayoutParams pParams, lParams;
 
-    private String htmlStr = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:mm:ss";
-    private String htmlStr2 = "<font color='#000000'>y</font>yyy-<font color='#000000'>MM-dd</font> HH:";
+    private long chronometerBase;
+
+    private String htmlStr = "yyyy-MM-dd HH:mm:ss";
+    private String htmlStr2 = "yyyy-MM-dd HH:";
+    private String htmlStr3 = "yyyy-MM-dd ";
     private SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
     // Activity lifecycle
     private NetReceiver mNetReceiver;
+
+    private SeekBar seekBar;
+
 
     private static boolean isBehindLiveWindow(ExoPlaybackException e) {
 
@@ -260,6 +273,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        clockMode = getIntent().getBooleanExtra("rec", false);
 
         shouldAutoPlay = false;
 
@@ -336,21 +351,32 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
 
         retryButton.setOnClickListener(this);
 
+        seekBar = findViewById(R.id.seekBar);
+        seekTime = findViewById(R.id.seekTime);
+
         mTextClock = findViewById(R.id.textClock);
         mTextClock.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
 
+        mChronometer = findViewById(R.id.chronometer2);
+        mChronometer.setTypeface(Typeface.createFromAsset(getAssets(), "video.TTF"));
 
         mTextClock.setFormat24Hour(Html.fromHtml(htmlStr2) + sdf.format(new Date()));
         mTextClock.setAlpha(0.5f);
-        mTextClock.setVisibility(View.INVISIBLE);
+        mChronometer.setAlpha(0.5f);
+        mChronometer.setVisibility(View.GONE);
+
 
         pParams = (FrameLayout.LayoutParams) mTextClock.getLayoutParams();
+        mChronometer.setLayoutParams(pParams);
         lParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         lParams.setMargins(0, 32, 113, 0);
         mTextClock.setTextSize(14);
+        mChronometer.setTextSize(14);
         if (isLandscape()) {
             mTextClock.setLayoutParams(lParams);
+            mChronometer.setLayoutParams(lParams);
             mTextClock.setTextSize(L_SIZE);
+            mChronometer.setTextSize(L_SIZE);
         }
 
         playerTitle.setText(getIntent().getCharSequenceExtra("title"));
@@ -383,6 +409,21 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             }
         });
 
+        playbackPause = findViewById(R.id.play_pause_btn);
+        playbackPause.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    chronometerBase = SystemClock.elapsedRealtime();
+                    mChronometer.stop();
+
+                } else {
+                    mChronometer.setBase(SystemClock.elapsedRealtime() - chronometerBase + mChronometer.getBase());
+                    mChronometer.start();
+                }
+            }
+        });
+
         simpleExoPlayerView = findViewById(R.id.player_view);
         simpleExoPlayerView.hideController();
 
@@ -397,23 +438,82 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         mNetReceiver = new NetReceiver();
+        mChronometer.stop();
 
-        if (NetWorkUtils.isWifiConnected(this)) {
+
+        if (NetWorkUtils.isWifiConnected(this) || getIntent().getBooleanExtra("isNetChecked?", false)) {
             shouldAutoPlay = true;
             mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+            mChronometer.setBase(SystemClock.elapsedRealtime());
+            mChronometer.start();
         } else {
             showNormalDialog();
         }
 
         registerReceiver(mNetReceiver, filter);
 
-        if (getIntent().getBooleanExtra("rec", false)) {
+
+        if (clockMode) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.HOUR, -getIntent().getIntExtra("rec_time_offset", 0));
+            SimpleDateFormat format = new SimpleDateFormat("HH");
+            mTextClock.setFormat24Hour(Html.fromHtml(htmlStr3) + format.format(c.getTime()) + ":     ");
             playPauseButton.setVisibility(View.VISIBLE);
+            seekBar.setVisibility(View.VISIBLE);
+            seekTime.setVisibility(View.VISIBLE);
+
+            mChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                @Override
+                public void onChronometerTick(Chronometer chronometer) {
+                    //SystemClock.elapsedRealtime()系统当前时间
+                    //chronometer.getBase()记录计时器开始时的时间
+
+                    seekBar.setProgress((int) ((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000));
+                    seekTime.setText(mChronometer.getText());
+
+
+                }
+            });
+
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                int progress;
+                boolean fromUser;
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    this.progress = progress;
+                    this.fromUser = fromUser;
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if (NetWorkUtils.isNetworkConnected(PlayerActivity.this) && fromUser) {
+
+                        mChronometer.setBase(mChronometer.getBase() - progress);
+                        mChronometer.start();
+                        seekTime.setText(mChronometer.getText());
+                    }
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            //execute the task
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    }, 2000);
+                }
+            });
             recVideoButton.setVisibility(View.GONE);
             screenShotBtn.setVisibility(View.GONE);
             soundBtn.setVisibility(View.GONE);
         } else {
             playPauseButton.setVisibility(View.GONE);
+            seekBar.setVisibility(View.GONE);
+            seekTime.setVisibility(View.GONE);
             recVideoButton.setVisibility(View.VISIBLE);
             screenShotBtn.setVisibility(View.VISIBLE);
             soundBtn.setVisibility(View.VISIBLE);
@@ -435,7 +535,12 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 shouldAutoPlay = true;
-                mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+                if (clockMode) {
+                    mChronometer.setBase(SystemClock.elapsedRealtime());
+                    mChronometer.start();
+                } else {
+                    mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+                }
             }
         });
         normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -554,6 +659,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             mTextClock.setLayoutParams(lParams);
             mTextClock.setTextSize(L_SIZE);
+            mChronometer.setLayoutParams(lParams);
+            mChronometer.setTextSize(L_SIZE);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
@@ -563,6 +670,8 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             mTextClock.setLayoutParams(pParams);
             mTextClock.setTextSize(14);
+            mChronometer.setLayoutParams(pParams);
+            mChronometer.setTextSize(14);
         }
         Log.d("Test", "rotate");
     }
@@ -1098,6 +1207,7 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
         switch (playbackState) {
             case Player.STATE_BUFFERING:
                 mProgressBar.setVisibility(View.VISIBLE);
+                mChronometer.setVisibility(View.INVISIBLE);
                 mTextClock.setVisibility(View.INVISIBLE);
                 break;
             case Player.STATE_ENDED:
@@ -1106,8 +1216,23 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
             case Player.STATE_IDLE:
                 break;
             case Player.STATE_READY:
-                mProgressBar.setVisibility(View.INVISIBLE);
                 mTextClock.setVisibility(View.VISIBLE);
+                mChronometer.stop();
+                if (clockMode) {
+                    mChronometer.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    mChronometer.setVisibility(View.GONE);
+                }
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        //execute the task
+                        mProgressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                }, 3500);
+
                 break;
             default:
                 break;
@@ -1389,12 +1514,18 @@ public class PlayerActivity extends Activity implements OnClickListener, EventLi
                                 showToast("無法連結網路");
                         }
                     }, 1000);
-                    mTextClock.setFormat24Hour(Html.fromHtml(htmlStr2) + sdf.format(stopDate));
+                    if (!clockMode) {
+                        mTextClock.setFormat24Hour(Html.fromHtml(htmlStr2) + sdf.format(stopDate));
+                    }
+                    mChronometer.stop();
                     mProgressBar.setVisibility(View.VISIBLE);
                     recVideoButton.setEnabled(false);
                     screenShotBtn.setEnabled(false);
                 } else {
-                    mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+                    if (!clockMode) {
+                        mTextClock.setFormat24Hour(Html.fromHtml(htmlStr));
+                    }
+                    mChronometer.start();
                     mProgressBar.setVisibility(View.INVISIBLE);
                     recVideoButton.setEnabled(true);
                     screenShotBtn.setEnabled(true);
